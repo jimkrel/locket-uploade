@@ -1,0 +1,3522 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ÄÄng áº£nh/video | Binhake ã</title>
+
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/tailwind.css?v=3">
+    <link rel="stylesheet" href="/assets/css/globals.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="https://ineqe.com/wp-content/uploads/2022/02/locket_app_icon-1024x1024.png" />
+    <link rel="icon" type="image/png" sizes="32x32"
+        href="https://ineqe.com/wp-content/uploads/2022/02/locket_app_icon-1024x1024.png" />
+    <link rel="icon" type="image/png" sizes="16x16"
+        href="https://ineqe.com/wp-content/uploads/2022/02/locket_app_icon-1024x1024.png" />
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+
+    <style>
+        input[type="color"] {
+            -webkit-appearance: none;
+            appearance: none;
+            border: none;
+            padding: 0;
+            background: transparent;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 14px;
+        }
+
+        input[type="color"]::-moz-color-swatch {
+            border: none;
+            border-radius: 14px;
+        }
+    </style>
+
+    <style>
+        .fm-contentPunch {
+            --badge: 26px;
+            --gap: 6px;
+            --out: 4px;
+            --inset: 0px;
+
+            --cut: calc(var(--badge) + var(--gap));
+
+            --cx: calc(100% + var(--inset) + var(--out) - (var(--badge) / 2));
+            --cy: calc(100% + var(--inset) + var(--out) - (var(--badge) / 2));
+
+            -webkit-mask-image:
+                linear-gradient(#000 0 0),
+                radial-gradient(circle calc(var(--cut)/2) at var(--cx) var(--cy),
+                    #000 0 calc(100% - 0.01px), transparent 100%);
+            -webkit-mask-composite: destination-out;
+
+            mask-image:
+                linear-gradient(#000 0 0),
+                radial-gradient(circle calc(var(--cut)/2) at var(--cx) var(--cy),
+                    #000 0 calc(100% - 0.01px), transparent 100%);
+            mask-composite: exclude;
+        }
+
+        .fm-scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any/dist/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-[#000000] via-[#120c00] to-[#2b1f00] text-white">
+    <div id="pageLoader" class="fixed inset-0 z-[999] hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+
+        <div class="absolute inset-0 grid place-items-center">
+            <div class="flex flex-col items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-white/5 ring-1 ring-white/10 grid place-items-center">
+                    <div class="w-6 h-6 rounded-full border-2 border-white/20 border-t-[#ffd24a] animate-spin"></div>
+                </div>
+
+                <div class="text-sm text-white/70">Äang táº£iâ¦</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full p-3 sm:p-6">
+        <div class="mx-auto max-w-screen-2xl rounded-3xl bg-white/5 backdrop-blur-xl shadow-2xl ring-1 ring-white/10">
+            <div class="flex rounded-3xl bg-[#181a1b] backdrop-blur-xl">
+                <aside class="hidden lg:block w-20 bg-transparent">
+                    <div class="sticky top-6 h-[calc(100vh-3rem)] flex flex-col items-center py-6">
+                        <div class="flex-1"></div>
+                        <div id="sidebarNav" class="w-full flex flex-col items-center gap-3 overflow-y-auto px-2 py-2">
+                        </div>
+                        <div class="flex-1"></div>
+                    </div>
+                </aside>
+
+                <div class="flex-1 overflow-hidden rounded-r-3xl">
+                    <main class="flex-1 p-4 sm:p-6 pb-28 lg:pb-6">
+                        <div class="flex items-center justify-between gap-3">
+                            <div id="displayName" class="text-white/80">
+                                <span class="block lg:inline text-white font-bold"></span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <input
+                                    class="hidden sm:block w-72 rounded-full bg-white/5 px-4 py-2 text-white/80 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-[#ffd24a]/40"
+                                    placeholder="TÃ¬m kiáº¿m chá»©c nÄng..." disabled />
+                                <button
+                                    class="rounded-full bg-[#ffd24a] hover:bg-[#ffe07a] text-black px-4 py-2 font-semibold transition"
+                                    onclick="window.location.replace('logout.html')">ÄÄng xuáº¥t</button>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 grid gap-6 lg:grid-cols-[minmax(500px,1fr)_350px]">
+                            <section class="space-y-6 min-w-0">
+                                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#ffd24a] to-[#ffd24a] p-6 text-black">
+                                    <!-- <div class="max-w-5xl">
+                                        <span class="inline-flex rounded-full bg-white/20 px-3 py-1 text-sm">Táº£i lÃªn</span>
+                                        <h1 class="mt-3 text-3xl sm:text-4xl font-bold">ÄÄng áº£nh / video</h1>
+                                        <p class="mt-2 text-white/90 text-sm sm:text-base">KÃ©o tháº£ áº£nh/video vÃ o khung bÃªn dÆ°á»i hoáº·c nháº¥n Äá» chá»n file</p>
+                                    </div> -->
+                                    <div class="donate-hero">
+                                        <div class="donate-hero__left">
+                                            <h1 class="mt-3 text-3xl sm:text-4xl font-bold leading-tight">
+                                                Donate má»t chÃºt nha ð¥º
+                                            </h1>
+
+                                            <p class="mt-2 text-sm sm:text-base">
+                                                HÃ£y donate cho tá» Äá» cÃ³ Äá»ng lá»±c lÃ m tiáº¿p cÃ¡c chá»©c nÄng khÃ¡c nhÃ© ð­
+                                                <span class="hidden sm:inline"> â¢ </span>
+                                                <span class="sm:whitespace-nowrap">Nháº¥n vÃ o mÃ£ QR bÃªn pháº£i lÃ  tá»± Äá»ng
+                                                    sao chÃ©p thÃ´ng tin nÃ¨ ð«¶</span>
+                                            </p>
+                                        </div>
+
+                                        <div class="donate-hero__qr" data-copy="99MM24364MC0001416 BVBank">
+                                            <div class="donate-hero__qrBox">
+                                                <img src="/assets/images/QRPayment.webp" alt="QR donate">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-5 rounded-2xl bg-black/10 ring-1 ring-black/10 p-4">
+                                        <input id="uploadInput" type="file" accept="image/*,video/*" class="hidden" />
+
+                                        <div id="dropZone" role="button" tabindex="0"
+                                            class="w-full rounded-2xl border-2 border-dashed border-black/30 bg-white/10 hover:bg-white/15 transition p-5 text-left cursor-pointer">
+                                            <div class="grid grid-cols-[48px_minmax(0,1fr)] gap-4">
+                                                <div id="dropHeader" class="contents">
+                                                    <div
+                                                        class="w-12 h-12 rounded-2xl bg-white/25 grid place-items-center shrink-0">
+                                                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+                                                    </div>
+
+                                                    <div class="min-w-0">
+                                                        <div class="font-semibold text-lg">KÃ©o tháº£ áº£nh/video vÃ o ÄÃ¢y
+                                                        </div>
+                                                        <div class="text-sm text-black/70 mt-1">Há» trá»£:
+                                                            JPG/PNG/WEBP/HEIC/GIF/MP4/MOV (dÆ°á»i 50MB) â¢ Nháº¥n Äá» chá»n
+                                                            file</div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="filePreviewWrap" class="col-span-2 hidden"> <!-- mt-4 -->
+                                                    <div class="rounded-2xl bg-white/15 ring-1 ring-black/10 p-3">
+                                                        <div class="flex items-center justify-between gap-3">
+                                                            <div class="min-w-0">
+                                                                <div id="fileMeta"
+                                                                    class="text-sm font-semibold truncate"></div>
+                                                                <div id="fileMeta2"
+                                                                    class="text-xs text-black/65 mt-0.5"></div>
+                                                            </div>
+
+                                                            <button id="removeFileBtn" type="button"
+                                                                class="rounded-xl bg-white/30 hover:bg-white/40 px-3 py-2 text-sm font-semibold transition">
+                                                                Bá» chá»n
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="mt-3">
+                                                            <div id="mediaGrid" class="grid gap-3">
+                                                                <div id="imgBox"
+                                                                    class="relative w-full min-w-0 overflow-hidden rounded-2xl ring-1 ring-white/10 bg-white/5">
+                                                                    <div class="aspect-square w-full"></div>
+                                                                    <img id="imgPreview"
+                                                                        class="absolute inset-0 h-full w-full object-cover hidden"
+                                                                        alt="">
+                                                                </div>
+
+                                                                <div id="vidBox"
+                                                                    class="relative w-full min-w-0 overflow-hidden rounded-2xl ring-1 ring-white/10 bg-white/5 hidden">
+                                                                    <div class="aspect-square w-full"></div>
+                                                                    <video id="vidPreview"
+                                                                        class="absolute inset-0 h-full w-full object-contain bg-black/40 hidden"
+                                                                        controls muted playsinline
+                                                                        controlsList="nodownload nofullscreen noremoteplayback"
+                                                                        oncontextmenu="return false;"></video>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="pointer-events-none absolute -right-20 -top-16 w-72 h-72 rounded-full bg-white/15 blur-2xl">
+                                    </div>
+                                    <div
+                                        class="pointer-events-none absolute right-10 bottom-[-80px] w-80 h-80 rounded-full bg-black/10 blur-2xl">
+                                    </div>
+                                </div>
+
+                                <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-4">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div>
+                                            <div class="font-semibold">TÃ¹y chá»nh Caption</div>
+                                        </div>
+                                        <span id="captionSelectedBadge"
+                                            class="text-xs rounded-full bg-white/5 ring-1 ring-white/10 px-2 py-0.5 text-white/70">Caption:
+                                            Máº·c Äá»nh</span>
+                                    </div>
+
+                                    <textarea id="captionText"
+                                        class="mt-4 w-full min-h-[110px] rounded-2xl bg-white/5 px-4 py-3 text-white/90 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-[#ffd24a]/40"
+                                        placeholder="Nháº­p caption cá»§a báº¡n..."></textarea>
+
+                                    <div id="captionExtra" class="mt-3 hidden">
+                                        <label class="text-xs text-white/60">Dá»¯ liá»u bá» sung</label>
+                                        <input id="captionExtraInput"
+                                            class="mt-2 w-full rounded-2xl bg-white/5 px-4 py-2.5 text-white/90 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-[#ffd24a]/40"
+                                            placeholder="" />
+                                        <div id="captionExtraHint" class="mt-1 text-xs text-white/50"></div>
+
+                                        <div id="customCaptionOptions" class="mt-2 hidden">
+                                            <div class="flex items-center gap-4 flex-wrap">
+                                                <!-- Layout -->
+                                                <div
+                                                    class="inline-flex items-center rounded-full bg-white/5 ring-1 ring-white/10 p-1">
+                                                    <button id="customCaptionLayoutNewline" type="button"
+                                                        class="px-4 py-2 rounded-full text-sm font-semibold transition">
+                                                        Xuá»ng dÃ²ng
+                                                    </button>
+                                                    <button id="customCaptionLayoutScroll" type="button"
+                                                        class="px-4 py-2 rounded-full text-sm font-semibold transition">
+                                                        TrÆ°á»£t ngang
+                                                    </button>
+                                                </div>
+
+                                                <!-- Color mode -->
+                                                <div
+                                                    class="inline-flex items-center rounded-full bg-white/5 ring-1 ring-white/10 p-1">
+                                                    <button id="customCaptionColorDefault" type="button"
+                                                        class="px-4 py-2 rounded-full text-sm font-semibold transition">
+                                                        MÃ u ná»n máº·c Äá»nh
+                                                    </button>
+                                                    <!-- <button id="customCaptionColorPreset" type="button" class="px-4 py-2 rounded-full text-sm font-semibold transition">
+                                                        MÃ u ná»n khÃ¡c
+                                                    </button> -->
+                                                    <button id="customCaptionColorCustom" type="button"
+                                                        class="px-4 py-2 rounded-full text-sm font-semibold transition">
+                                                        MÃ u ná»n tuá»³ chá»nh
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div id="customCaptionOptionsHint" class="mt-1 text-xs text-white/50"></div>
+                                            <div id="customCaptionPresetWrap" class="mt-3 hidden">
+                                                <div class="text-xs text-white/60 mb-2">Chá»n mÃ u ná»n máº«u</div>
+                                                <div id="customCaptionPresetPills" class="flex flex-wrap gap-2"></div>
+                                            </div>
+                                        </div>
+
+                                        <div id="captionExtraColors" class="mt-2 hidden">
+                                            <div class="grid grid-cols-3 gap-3">
+                                                <div>
+                                                    <div class="text-xs text-white/60 mb-1">MÃ u trÃªn</div>
+                                                    <input id="colorTop" type="color" value="#ffd24a"
+                                                        class="w-full h-10 rounded-xl overflow-hidden bg-transparent ring-1 ring-white/10">
+                                                </div>
+                                                <div>
+                                                    <div class="text-xs text-white/60 mb-1">MÃ u dÆ°á»i</div>
+                                                    <input id="colorBottom" type="color" value="#2b1f00"
+                                                        class="w-full h-10 rounded-xl overflow-hidden bg-transparent ring-1 ring-white/10">
+                                                </div>
+                                                <div>
+                                                    <div class="text-xs text-white/60 mb-1">MÃ u chá»¯</div>
+                                                    <input id="colorText" type="color" value="#ffffff"
+                                                        class="w-full h-10 rounded-xl overflow-hidden bg-transparent ring-1 ring-white/10">
+                                                </div>
+                                            </div>
+
+                                            <!-- <div class="mt-2 text-xs text-white/60">Tá»± Äá»ng bá» vÃ o Ã´ nháº­p bÃªn trÃªn.</div> -->
+                                        </div>
+
+                                        <div id="weatherCaptionPresetWrap" class="mt-3 hidden">
+                                            <div class="text-xs text-white/60 mb-2">Chá»n giao diá»n thá»i tiáº¿t</div>
+                                            <div id="weatherCaptionPresetPills" class="flex flex-wrap gap-2"></div>
+                                        </div>
+
+                                        <div id="reunificationDayPills" class="mt-3 hidden">
+                                            <div class="flex gap-3 flex-wrap">
+                                                <button id="pillFlagVN" type="button"
+                                                    class="px-4 py-2 rounded-2xl font-semibold ring-2 ring-[#ffd24a] bg-[#910000] text-[#F6D669]">
+                                                    Cá» Äá» sao vÃ ng
+                                                </button>
+
+                                                <button id="pillFlagMT" type="button"
+                                                    class="px-4 py-2 rounded-2xl font-semibold ring-1 ring-white/20 bg-white text-black">
+                                                    Cá» Máº·t tráº­n DÃ¢n tá»c Giáº£i phÃ³ng miá»n Nam Viá»t Nam (mÃ´ phá»ng)
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div id="captionExtraStars" class="mt-2 hidden">
+                                            <input id="captionExtraStarsRange" type="range" min="0.5" max="5" step="0.5"
+                                                value="5" class="w-full accent-[#ffd24a]" />
+                                            <div class="mt-1 text-sm text-white/70">
+                                                ÄÃ¡nh giÃ¡: <span id="captionExtraStarsValue"
+                                                    class="text-white font-semibold">5</span> â­
+                                            </div>
+                                        </div>
+
+                                        <select id="captionExtraSelect"
+                                            class="mt-2 hidden w-full rounded-xl bg-white/5 px-3 py-2 text-sm text-white ring-1 ring-white/10">
+                                            <option value="">â Äang táº£i Äá»a chá»... â</option>
+                                        </select>
+
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <div class="text-xs text-white/50 mb-2">Caption nguyÃªn báº£n</div>
+                                        <div id="captionPills" class="flex flex-wrap gap-3"></div>
+                                    </div>
+
+                                    <div class="mt-4">
+                                        <div class="text-xs text-white/50 mb-2"></div> <!-- Sticker / GIF -->
+                                        <div id="captionPillsMedia" class="flex flex-wrap gap-3"></div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <aside class="space-y-6 w-full min-w-0 lg:shrink-0">
+                                <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-4">
+                                    <div class="font-semibold text-center">XÃ¡c nháº­n &amp; ÄÄng bÃ i</div>
+
+                                    <div class="mt-4 flex items-center justify-between gap-3">
+                                        <div>
+                                            <div class="text-sm font-medium">ð¥ÄÄng Äá» khÃ´i phá»¥c chuá»i</div>
+                                            <div class="text-xs text-white/50 mt-0.5">Báº­t náº¿u bÃ i ÄÄng nÃ y dÃ¹ng Äá» khÃ´i
+                                                phá»¥c chuá»i</div>
+                                        </div>
+
+                                        <label class="relative inline-flex items-center cursor-pointer select-none">
+                                            <input id="restoreToggle" type="checkbox" class="sr-only peer" />
+                                            <div
+                                                class="w-14 h-8 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ffd24a]/40 rounded-full peer peer-checked:bg-[#ffd24a]/30 transition ring-1 ring-white/10">
+                                            </div>
+                                            <div
+                                                class="absolute left-1 top-1 w-6 h-6 bg-white/70 rounded-full transition peer-checked:translate-x-6 peer-checked:bg-[#ffd24a]">
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <div
+                                        class="mt-4 rounded-2xl border-2 border-dashed border-white/15 bg-black/20 p-4">
+                                        <div class="text-sm font-semibold text-white/90">XÃ¡c nháº­n thÃ´ng tin:</div>
+                                        <pre id="confirmText"
+                                            class="mt-2 text-sm text-white/70 whitespace-pre-wrap font-sans"></pre>
+                                    </div>
+
+                                    <button id="postBtn"
+                                        class="mt-4 w-full rounded-2xl bg-[#ffd24a] hover:bg-[#ffe07a] text-black px-4 py-3 font-extrabold transition">
+                                        ÄÄng ngay
+                                    </button>
+                                </div>
+
+                                <div class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-4">
+                                    <div class="flex items-center justify-between gap-3">
+                                        <div>
+                                            <div class="font-semibold">Chá»n Äá»i tÆ°á»£ng cÃ³ thá» xem</div>
+                                            <div class="text-xs text-white/50 mt-0.5">NhÃ³m báº¡n (radio) hoáº·c báº¡n bÃ¨ cá»¥
+                                                thá» (checkbox)</div>
+                                        </div>
+
+                                        <!-- <span id="audienceBadge" class="text-xs rounded-full bg-white/5 ring-1 ring-white/10 px-2 py-0.5 text-white/70">
+                                            ToÃ n bá» báº¡n bÃ¨
+                                        </span> -->
+                                    </div>
+
+                                    <!-- <div class="mt-4 flex items-center justify-between gap-3">
+                                        <div>
+                                            <div class="text-sm font-medium">Cháº¿ Äá» loáº¡i trá»« nhÃ³m báº¡n</div>
+                                            <div class="text-xs text-white/50 mt-0.5">Báº­t náº¿u cáº­u muá»n ÄÄng cho toÃ n bá» báº¡n bÃ¨ trá»« nhá»¯ng ngÆ°á»i trong nhÃ³m báº¡n mÃ  cáº­u chá»n bÃªn dÆ°á»i</div>
+                                        </div>
+
+                                        <label class="relative inline-flex items-center cursor-pointer select-none">
+                                            <input id="exceptGroupToggle" type="checkbox" class="sr-only peer" />
+                                            <div class="w-14 h-8 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#ffd24a]/40 rounded-full peer peer-checked:bg-[#ffd24a]/30 transition ring-1 ring-white/10"></div>
+                                            <div class="absolute left-1 top-1 w-6 h-6 bg-white/70 rounded-full transition peer-checked:translate-x-6 peer-checked:bg-[#ffd24a]"></div>
+                                        </label>
+                                    </div> -->
+
+                                    <!-- <div class="mt-4">
+                                        <div class="text-sm font-medium">NhÃ³m báº¡n</div>
+                                        <div id="groupEmpty" class="hidden mt-2 rounded-xl bg-white/5 ring-1 ring-white/10 px-3 py-3 text-sm text-white/70">
+                                            CÃ³ váº» cáº­u chÆ°a táº¡o nhÃ³m báº¡n bÃ¨ nÃ o
+                                        </div>
+                                        <div id="groupList" class="mt-2 space-y-2"></div>
+                                    </div> -->
+
+                                    <!-- <div class="my-4 flex items-center gap-3">
+                                        <div class="h-px bg-white/10 flex-1"></div>
+                                        <span class="text-xs text-white/40">hoáº·c</span>
+                                        <div class="h-px bg-white/10 flex-1"></div>
+                                    </div> -->
+
+                                    <div>
+                                        <!-- <div class="text-sm font-medium">Báº¡n bÃ¨ cá»¥ thá»</div> -->
+
+                                        <input id="friendSearch"
+                                            class="mt-2 w-full rounded-2xl bg-white/5 px-4 py-2.5 text-white/80 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-[#ffd24a]/40"
+                                            placeholder="TÃ¬m kiáº¿m báº¡n bÃ¨..." />
+
+                                        <div class="mt-3 rounded-2xl bg-white/5 ring-1 ring-white/10 p-3">
+                                            <label class="flex items-center gap-3 cursor-pointer select-none">
+                                                <input id="chkAllFriends" type="checkbox"
+                                                    class="w-4 h-4 accent-[#ffd24a]" checked>
+                                                <span class="text-sm">Táº¥t cáº£ báº¡n bÃ¨</span>
+                                                <!-- <span class="ml-auto text-xs text-white/40">default</span> -->
+                                            </label>
+
+                                            <label class="mt-2 flex items-center gap-3 cursor-pointer select-none">
+                                                <input id="chkOnlyMe" type="checkbox" class="w-4 h-4 accent-[#ffd24a]">
+                                                <span class="text-sm">Chá» mÃ¬nh tÃ´i</span>
+                                            </label>
+                                        </div>
+
+                                        <div id="friendLoading"
+                                            class="mt-3 rounded-xl bg-white/5 ring-1 ring-white/10 px-3 py-3 text-sm text-white/70">
+                                            Äang táº£i danh sÃ¡ch báº¡n bÃ¨... <i id='loading'
+                                                class='fas fa-spinner fa-fw fa-2x fa-spin'
+                                                style='font-size: 18px; --fa-animation-duration: 1s;'></i>
+                                        </div>
+
+                                        <div id="friendListWrap" class="mt-3 hidden">
+                                            <div id="friendList"
+                                                class="space-y-2 max-h-[40vh] overflow-y-auto soft-scroll pr-1"></div>
+                                            <div id="friendEmpty" class="hidden mt-2 text-xs text-white/50">KhÃ´ng cÃ³ báº¡n
+                                                bÃ¨ nÃ o!</div>
+                                        </div>
+
+                                        <!-- <div id="friendDisabledHint" class="hidden mt-3 text-xs text-white/50">
+                                            Danh sÃ¡ch báº¡n bÃ¨ ÄÃ£ bá» vÃ´ hiá»u hoÃ¡ vÃ¬ báº¡n Äang chá»n <b class="text-white/70">Táº¥t cáº£ báº¡n bÃ¨</b>, <b class="text-white/70">Chá» mÃ¬nh tÃ´i</b> hoáº·c <b class="text-white/70">má»t nhÃ³m báº¡n</b>.
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </aside>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+        <footer data-animate
+            class="mt-20 pb-10 text-center text-white/70 opacity-0 translate-y-6 transition-all duration-700 ease-out">
+            <div class="flex flex-col items-center gap-4">
+                <div class="text-sm">
+                    Â© 2026 <span class="font-semibold text-white">Binhake ã</span>. Má»i quyá»n Äá»u ÄÆ°á»£c báº£o lÆ°u.
+                </div>
+
+                <div class="flex items-center gap-4 text-xl">
+                    <a href="#" class="hover:text-rose-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-rose-400 transition"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="hover:text-rose-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-rose-400 transition"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="hover:text-rose-400 transition"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="#" class="hover:text-rose-400 transition"><i class="fa-regular fa-envelope"></i></a>
+                </div>
+
+                <div class="w-64 h-px bg-white/20"></div>
+
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/60">
+                    <a href="#" class="hover:text-white transition">Lá»ch sá»­ cáº­p nháº­t</a>
+                    <a href="#" class="hover:text-white transition">ThÃ´ng tin ÄÃ³ng gÃ³p</a>
+                    <a href="#" class="hover:text-white transition">Dá»ch vá»¥ bÃªn thá»© ba</a>
+                </div>
+            </div>
+        </footer>
+        <script>
+            const observer = new IntersectionObserver(
+                entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.remove("opacity-0", "translate-y-6");
+                            entry.target.classList.add("opacity-100", "translate-y-0");
+                            observer.unobserve(entry.target); // chá» animate 1 láº§n
+                        }
+                    });
+                },
+                { threshold: 0.2 }
+            );
+
+            document.querySelectorAll("[data-animate]").forEach(el => observer.observe(el));
+        </script>
+    </div>
+
+    <!-- Mobile bottom nav (fixed, always visible, floating pill) -->
+    <nav class="lg:hidden fixed bottom-0 inset-x-0 z-50">
+        <div class="mx-auto max-w-7xl px-3 sm:px-6 pb-3">
+            <div class="rounded-2xl border border-white/10 bg-black/35 backdrop-blur-xl">
+                <div id="bottomNav" class="flex items-center justify-between px-2 py-2"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile "More" bottom sheet -->
+    <div id="moreSheet" class="fixed inset-0 z-[60] hidden">
+        <div id="moreBackdrop" class="absolute inset-0 bg-black/60"></div>
+
+        <div class="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-3 sm:px-6 pb-3">
+            <div class="rounded-2xl border border-white/10 bg-[#0c0b12]/85 backdrop-blur-xl shadow-2xl overflow-hidden">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-white/10">
+                    <div class="font-semibold">ToÃ n bá» chá»©c nÄng</div>
+                    <button id="closeMore"
+                        class="rounded-lg bg-white/5 hover:bg-white/10 px-3 py-1.5 ring-1 ring-white/10 text-sm">ÄÃ³ng</button>
+                </div>
+
+                <div id="moreGrid" class="p-4 grid grid-cols-4 sm:grid-cols-6 gap-3 max-h-[55vh] overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="cropModal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-black/70"></div>
+
+        <div class="relative h-full w-full p-3 sm:p-6">
+            <div class="mx-auto w-[min(96vw,900px)] h-[calc(100dvh-1.5rem)] sm:h-[calc(100dvh-3rem)] rounded-2xl bg-[#0b0b0b] ring-1 ring-white/10 shadow-xl flex flex-col overflow-hidden"
+                style="padding-bottom: env(safe-area-inset-bottom);">
+                <div class="shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10">
+                    <div class="text-white font-semibold">Cáº¯t áº£nh (vuÃ´ng)</div>
+                    <button id="cropClose" class="text-white/70 hover:text-white px-2 py-1">â</button>
+                </div>
+
+                <div class="flex-1 min-h-0 p-4">
+                    <div class="h-full w-full rounded-xl overflow-hidden bg-black/40 ring-1 ring-white/10">
+                        <img id="cropImage" class="block max-w-full" alt="">
+                    </div>
+                </div>
+
+                <div class="shrink-0 px-4 pb-4 pt-3 border-t border-white/10 bg-[#0b0b0b]">
+                    <div class="flex flex-wrap gap-2 justify-end">
+                        <button id="cropCancel"
+                            class="rounded-full bg-white/10 hover:bg-white/15 text-white px-4 py-2">Huá»·</button>
+                        <button id="cropSkip"
+                            class="rounded-full bg-white/10 hover:bg-white/15 text-white px-4 py-2">ÄÄng mÃ  khÃ´ng
+                            cáº¯t</button>
+                        <button id="cropConfirm"
+                            class="rounded-full bg-[#ffd24a] hover:bg-[#ffe07a] text-black font-semibold px-4 py-2">Cáº¯t
+                            áº£nh</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="videoCropModal" class="fixed inset-0 z-[60] hidden">
+        <div class="absolute inset-0 bg-black/70"></div>
+
+        <div class="relative h-full w-full p-3 sm:p-6">
+            <div class="mx-auto w-[min(96vw,900px)] h-[calc(100dvh-1.5rem)] sm:h-[calc(100dvh-3rem)] rounded-2xl bg-[#0b0b0b] ring-1 ring-white/10 shadow-xl flex flex-col overflow-hidden"
+                style="padding-bottom: env(safe-area-inset-bottom);">
+                <div class="shrink-0 flex items-center justify-between px-4 py-3 border-b border-white/10">
+                    <div class="text-white font-semibold">Cáº¯t video (vuÃ´ng)</div>
+                    <button id="videoCropClose" class="text-white/70 hover:text-white px-2 py-1">â</button>
+                </div>
+
+                <div class="flex-1 min-h-0 p-4">
+                    <!-- THÃM relative á» ÄÃ¢y -->
+                    <div class="relative h-full w-full rounded-xl overflow-hidden bg-black/40 ring-1 ring-white/10">
+
+                        <!-- Bá» absolute inset-0 -->
+                        <video id="videoCropPlayer" class="w-full h-full object-contain" controls autoplay muted loop
+                            playsinline controlsList="nodownload nofullscreen noremoteplayback"
+                            oncontextmenu="return false;"></video>
+
+                        <!-- crop box váº«n absolute OK vÃ¬ cha ÄÃ£ relative -->
+                        <div id="videoCropBoxModal"
+                            class="absolute border-2 border-[#ffd24a] rounded-xl bg-black/10 cursor-move select-none touch-none">
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="shrink-0 px-4 pb-4 pt-3 border-t border-white/10 bg-[#0b0b0b]">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap gap-2">
+                            <button id="videoCropCenter"
+                                class="rounded-full bg-white/10 hover:bg-white/15 text-white px-4 py-2">Canh
+                                giá»¯a</button>
+                            <button id="videoCropReset"
+                                class="rounded-full bg-white/10 hover:bg-white/15 text-white px-4 py-2">Reset</button>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 justify-end">
+                            <button id="videoCropCancel"
+                                class="rounded-full bg-white/10 hover:bg-white/15 text-white px-4 py-2">Huá»·</button>
+                            <button id="videoCropConfirm"
+                                class="rounded-full bg-[#ffd24a] hover:bg-[#ffe07a] text-black font-semibold px-4 py-2">Cáº¯t
+                                video</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container fixed top-4 right-4 z-[9999] space-y-2 w-[min(92vw,420px)] pointer-events-none"></div>
+
+    <script>
+        let activeId = "upload"; // máº·c Äá»nh
+    </script>
+
+    <script src="/assets/js/functions.js"></script>
+    <script src="/assets/js/preload.js"></script>
+    <script src="/assets/js/getInfo.js" defer type="module"></script>
+
+    <script>
+
+
+        const captionTypes = [
+            { id: "defaultCaption", category: "main", label: "Máº·c Äá»nh", icon: "Aa", bg: "bg-white/5", text: "text-white/85", ring: "ring-white/10" },
+            { id: "musicCaption", category: "main", label: "Äang phÃ¡t", icon: `<i class="fa-solid fa-music text-emerald-300"></i>`, bg: "bg-[linear-gradient(to_bottom,#60514E3D,#60514E3D)]", text: "text-white/85", ring: "ring-white/10" }, // needsExtra: true, extraLabel: "Nháº­p liÃªn káº¿t bÃ i hÃ¡t Spotify/Apple Music", extraPlaceholder: "VÃ­ dá»¥: https://open.spotify.com/track/6WzAV66bgiqyxHTBlznb37"
+            // { id: "linkCaption", category: "main", label: "LiÃªn káº¿t", icon: `<i class="fa-solid fa-link"></i>`, bg: "bg-white/5", text: "text-white/85", ring: "ring-white/10", needsExtra: true, extraLabel: "Nháº­p liÃªn káº¿t ÄÃ­nh kÃ¨m", extraPlaceholder: "VÃ­ dá»¥: https://locket.binhake.dev/index.html" },
+            { id: "customCaption", category: "main", label: "Caption tuá»³ chá»nh", icon: "Aa", needsExtra: true, extraLabel: "TÃ¹y chá»nh caption", extraPlaceholder: "#FFD24A,#000000,#FFFFFF", extraHint: "Nháº­p 3 mÃ£ mÃ u: mÃ u trÃªn, mÃ u dÆ°á»i, mÃ u chá»¯. CÃ¡ch nhau báº±ng dáº¥u pháº©y hoáº·c khoáº£ng tráº¯ng. VÃ­ dá»¥: #ffcc00 #ff6600 #ffffff" },
+            { id: "locationCaption", category: "main", label: "Vá» trÃ­", icon: `<i class="fa-solid fa-location-dot text-white/70"></i>`, bg: "bg-white/5", text: "text-white/85", ring: "ring-white/10", needsExtra: true, extraLabel: "Nháº­p vá» trÃ­", extraPlaceholder: "VÃ­ dá»¥: Quáº­n 1, TP.HCM" },
+            // { id: "weatherCaption", category: "main", label: "Thá»i tiáº¿t", icon: `<i class="fa-solid fa-sun text-yellow-200"></i>`, bg: "bg-[linear-gradient(to_bottom,#7790A6,#AAAAAA)]", text: "text-white", ring: "ring-white/10", needsExtra: true, extraLabel: "Tuá»³ chá»n giao diá»n thá»i tiáº¿t" },
+            { id: "timeCaption", category: "main", label: "Thá»i gian", icon: `<i class="fa-solid fa-clock text-white"></i>`, bg: "bg-white/5", text: "text-white/85", ring: "ring-white/10" },
+            { id: "womens_day2026_vnCaption", category: "main", label: "Má»«ng ngÃ y Phá»¥ ná»¯", icon: `ð¸`, bg: "bg-[linear-gradient(to_bottom,#F6DAFB,#EB9596)]", text: "text-[#4F003E]", ring: "ring-white/10" },
+
+            { id: "hello2026_vnCaption", category: "main", label: "Xin chÃ o 2026!", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#3B00EC,#823FFF)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+
+            { id: "horse_year2026_vnCaption", category: "main", label: "Xin chÃ o BÃ­nh Ngá»!", icon: `ð´`, bg: "bg-[linear-gradient(to_bottom,#910000,#7B0909)]", text: "text-[#F6D669]", ring: "ring-white/10" },
+            { id: "valentines_day2026_vnCaption", category: "main", label: "TÃ¬nh yÃªu cá»§a mÃ¬nh ÄÃ¢y", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#EA4D9E,#D20034)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "newYearsDayCaption", category: "main", label: "2026", icon: ``, bg: "bg-[linear-gradient(to_bottom,#FF0062,#FF783F)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "christmas_vn_2025Caption", category: "main", label: "GiÃ¡ng sinh an lÃ nh", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#FFFFFF,#BBDDCF)]", text: "text-[#117335]", ring: "ring-white/10" },
+            { id: "tis_the_seasonCaption", category: "main", label: "'Tis the season", icon: `âï¸`, bg: "bg-[linear-gradient(to_bottom,#0088FF,#BBC3DD)]", text: "text-[#FFFFFFE5]", ring: "ring-white/10", effect: "snow" },
+            { id: "teachers_day_2025Caption", category: "main", label: "TÃ´n vinh tháº§y cÃ´", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#355445,#4F7560)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "halloween_2025Caption", category: "main", label: "Halloween", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#150804,#C8540D)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "womens_day_2025Caption", category: "main", label: "NgÃ y Phá»¥ ná»¯", icon: `ð·`, bg: "bg-[linear-gradient(to_bottom,#F5DBFF,#D2C6EC)]", text: "text-[#3E0667]", ring: "ring-white/10" },
+            { id: "midautumn_2025Caption", category: "main", label: "Vui Táº¿t Trung Thu", icon: `ð¥®`, bg: "bg-[linear-gradient(to_bottom,#340D06,#7B2112)]", text: "text-[#FFDFA0]", ring: "ring-white/10" },
+            { id: "labor_day_2025Caption", category: "main", label: "Quá»c khÃ¡nh 2/9", icon: detectOS() == "Windows" ? { type: "image", src: "https://flagcdn.com/w40/vn.png", alt: "Vietnam Flag" } : 'ð»ð³', bg: "bg-[linear-gradient(to_bottom,#EA2A22,#C5231C)]", text: "text-[#FCDE5C]", ring: "ring-white/10" },
+            { id: "happyJuly4thCaption", category: "main", label: "Happy July 4th!", icon: detectOS() == "Windows" ? { type: "image", src: "https://flagcdn.com/w40/us.png", alt: "United States Flag" } : 'ðºð¸', bg: "bg-[linear-gradient(to_bottom,#F7F3E9,#D9D5CB)]", text: "text-[#292C90]", ring: "ring-white/10" },
+            { id: "fathers_day_2025Caption", category: "main", label: "Fatherâs Day", icon: `ð¥`, bg: "bg-[linear-gradient(to_bottom,#3141B8,#281B5A)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "memorialDayCaption", category: "main", label: "Memorial Day", icon: `ðï¸`, bg: "bg-[linear-gradient(to_bottom,#F6F7E9,#D8D9CB)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "mothersDayCaption", category: "main", label: "Motherâs Day", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#F6D6D3,#DA9E99)]", text: "text-[#C51749]", ring: "ring-white/10" },
+            { id: "reunificationDayCaption", category: "main", label: "ChÃ o má»«ng 30/4", icon: { type: "image", src: "https://flagcdn.com/w40/vn.png", alt: "Vietnam Flag" }, bg: "bg-[linear-gradient(to_bottom,#910000,#7B0909)]", text: "text-[#F6D669]", ring: "ring-white/10", needsExtra: true, extraLabel: "Chá»n chá»§ Äá»", extraType: "pills" },
+            { id: "earthDayCaption", category: "main", label: "Earth Day", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#53C2FF,#033C9A)]", text: "text-[#FFFFFF]", ring: "ring-white/10" },
+            { id: "happyEasterCaption", category: "main", label: "Happy Easter!", icon: `ð£`, bg: "bg-[linear-gradient(to_bottom,#FFFD89,#FFDA58)]", text: "text-[#E24B6C]", ring: "ring-white/10" },
+            { id: "reviewCaption", category: "main", label: "Review", icon: `<i class="fa-solid fa-star text-[#ffd24a]"></i>`, bg: "bg-white/5", text: "text-white/85", ring: "ring-white/10", needsExtra: true, extraLabel: "ÄÃ¡nh giÃ¡", extraHint: "Chá»n sá» sao tá»« 0.5 Äáº¿n 5" },
+            { id: "valentines_dayCaption", category: "main", label: "Happy Valentine's Day!", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#FBDAE6,#EB95B5)]", text: "text-[#D21514]", ring: "ring-white/10" },
+            { id: "tetNguyenDanCaption", category: "main", label: "Táº¿t NguyÃªn ÄÃ¡n", icon: `ð§§`, bg: "bg-[linear-gradient(to_bottom,#910000,#7B0909)]", text: "text-[#F6D669]", ring: "ring-white/10" },
+            { id: "happyNewYearCaption", category: "main", label: "Happy New Year!", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#3B00EC,#823FFF)]", text: "text-[#FFFFFFDB]", ring: "ring-white/10" },
+            { id: "merryChristmasCaption", category: "main", label: "Merry Christmas!", icon: `ð`, bg: "bg-[linear-gradient(to_bottom,#A22821,#D1332D)]", text: "text-[#FFFFFFDB]", ring: "ring-white/10", effect: "snow" },
+            { id: "goodMorningCaption", category: "main", label: "Good Morning", icon: "âï¸", bg: "bg-[linear-gradient(to_bottom,#EF7402,#EABF0F)]", text: "text-white", ring: "ring-white/10" },
+            { id: "goodNightCaption", category: "main", label: "Good Night", icon: "ð", bg: "bg-[linear-gradient(to_bottom,#370C6F,#575CD4)]", text: "text-white", ring: "ring-white/10" },
+            { id: "partyTimeCaption", category: "main", label: "Party Time!", icon: "ðª©", bg: "bg-[linear-gradient(to_bottom,#5EFFF5,#FCFF57)]", text: "text-black", ring: "ring-black/10" },
+            { id: "ootdCaption", category: "main", label: "OOTD", icon: "ð¶ï¸", bg: "bg-[linear-gradient(to_bottom,#FFFFFF,#DBDBDB)]", text: "text-black", ring: "ring-black/10" },
+            { id: "missYouCaption", category: "main", label: "Miss you", icon: "ð¥°", bg: "bg-[linear-gradient(to_bottom,#EC0C00,#FF493F)]", text: "text-white", ring: "ring-white/10" },
+        ];
+        const customCaptionPresets = [];
+        const weatherCaptionPresets = [
+            { id: "dawn", label: "SÃ¡ng sá»m", top: "#AE88FF", bottom: "#FFC1AD", text: "#FFFFFF", icon: "/assets/svg/cloud.sun.fill.svg", iconColor: "#FFFFFF", pathColors: ["#FFD24A", "#FFFFFF"] },
+            // { id: "morning",   label: "SÃ¡ng",      top: "#2D9AFF", bottom: "#6BDCFF", text: "#FFFFFF", icon: `/assets/svg/cloud.sun.fill.svg`, iconColor: "#FFFFFF", pathColors: ["#FFD24A", "#FFFFFF"] },
+            { id: "noon", label: "TrÆ°a", top: "#2D9AFF", bottom: "#6BDCFF", text: "#FFFFFF", icon: `/assets/svg/sun.max.fill.svg`, pathColors: ["#FFD24A", "#FFD24A"] },
+            { id: "cloud", label: "Nhiá»u mÃ¢y", top: "#7790A6", bottom: "#AAAAAA", text: "#FFFFFF", icon: "/assets/svg/cloud.fill.svg", iconColor: "#FFFFFF" },
+            { id: "afternoon", label: "Chiá»u", top: "#6C77DA", bottom: "#FFC896", text: "#FFFFFF", icon: "/assets/svg/moon.stars.fill.svg", iconColor: "" },
+            { id: "evening", label: "Tá»i", top: "#370C6F", bottom: "#575CD4", text: "#FFFFFF", icon: `/assets/svg/cloud.moon.fill.svg`, iconColor: "FFFFFF" },
+            { id: "night", label: `Khuya`, top: "#370C6F", bottom: "#575CD4", text: "#FFFFFF", icon: "/assets/svg/moon.stars.fill.svg", iconColor: "FFFFFF" },
+        ];
+
+        const groups = [];
+    </script>
+
+    <script>
+        function touchConfirm() {
+            try { updateConfirm(); } catch { }
+            try { recomputePostState(); } catch { }
+        }
+    </script>
+
+    <script>
+        function checkHeicFile(f) {
+            const t = (f?.type || "").toLowerCase();
+            const n = (f?.name || "").toLowerCase();
+            return t.includes("heic") || t.includes("heif") || n.endsWith(".heic") || n.endsWith(".heif");
+        }
+
+        async function normalize_HEIC_to_JPEG(inputFile) {
+            if (!checkHeicFile(inputFile)) return inputFile;
+
+            if (typeof heic2any !== "function") {
+                throw new Error("ThÆ° viá»n chuáº©n hÃ³a áº£nh HEIC chÆ°a ÄÆ°á»£c táº£i.");
+            }
+
+            // heic2any will return Blob or Blob[]
+            const out = await heic2any({ blob: inputFile, toType: "image/jpeg", quality: 0.92 });
+            const blob = Array.isArray(out) ? out[0] : out;
+
+            return new File([blob], string_normalization(inputFile.name) + ".jpg", {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+            });
+        }
+
+        function show_crop_media_popup(file) {
+            return new Promise((resolve, reject) => {
+                _pendingResolve = resolve;
+                _pendingReject = reject;
+
+                const url = URL.createObjectURL(file);
+                cropImageElement.src = url;
+
+                cropImageElement.onload = () => {
+                    if (cropper) cropper.destroy();
+
+                    cropper = new Cropper(cropImageElement, {
+                        aspectRatio: 1,
+                        viewMode: 1,
+                        dragMode: "move",
+                        autoCropArea: 1,
+                        responsive: true,
+                        background: false,
+                        movable: true,
+                        zoomable: true,
+                        rotatable: false,
+                        scalable: false,
+                    });
+
+                    openCropModal();
+                };
+            });
+        }
+
+        async function crop_image(originalFile) {
+            if (!cropper) return originalFile;
+
+            // Xuáº¥t ra vuÃ´ng, Æ°u tiÃªn 1080 (giá»ng kiá»u locket), báº¡n Äá»i tuá»³ Ã½
+            const outSize = 1080;
+
+            const canvas = cropper.getCroppedCanvas({
+                width: outSize,
+                height: outSize,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: "high",
+            });
+
+            const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.92));
+            if (!blob) return originalFile;
+
+            return new File([blob], (originalFile.name || "image").replace(/\.[^.]+$/, "") + ".jpg", {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+            });
+        }
+
+        function getAverageColor(img) {
+            const sample = document.createElement("canvas");
+
+            const sw = 40, sh = 40;
+            sample.width = sw; sample.height = sh;
+
+            const sctx = sample.getContext("2d", { willReadFrequently: true });
+            sctx.drawImage(img, 0, 0, sw, sh);
+
+            const { data } = sctx.getImageData(0, 0, sw, sh);
+
+            let r = 0, g = 0, b = 0, n = 0;
+            for (let i = 0; i < data.length; i += 4) {
+                const a = data[i + 3];
+                if (a < 10) continue;
+                r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+            }
+
+            if (!n) return { r: 0, g: 0, b: 0 };
+            return { r: Math.round(r / n), g: Math.round(g / n), b: Math.round(b / n) };
+        }
+
+        async function buildPaddedSquareFile(originalFile, {
+            mode = "tint",      // "tint" | "black"
+            outSize = 1080,
+            jpegQuality = 0.92
+        } = {}) {
+            const img = await new Promise((resolve, reject) => {
+                const im = new Image();
+                im.onload = () => resolve(im);
+                im.onerror = () => reject(new Error("KhÃ´ng Äá»c ÄÆ°á»£c áº£nh Äá» pad ná»n."));
+                im.src = URL.createObjectURL(originalFile);
+            });
+
+            const w = img.naturalWidth || 0;
+            const h = img.naturalHeight || 0;
+            if (!w || !h) return originalFile;
+
+            const longEdge = Math.max(w, h);
+            const scale = outSize / longEdge;
+            const drawW = Math.round(w * scale);
+            const drawH = Math.round(h * scale);
+
+            const cx = Math.round((outSize - drawW) / 2);
+            const cy = Math.round((outSize - drawH) / 2);
+
+            const canvas = document.createElement("canvas");
+            canvas.width = outSize;
+            canvas.height = outSize;
+            const ctx = canvas.getContext("2d");
+
+            // ná»n
+            let bg = { r: 0, g: 0, b: 0 };
+            if (mode === "tint") {
+                try {
+                    const avg = getAverageColor(img);
+                    bg = {
+                        r: Math.max(8, Math.round(avg.r * 0.35)),
+                        g: Math.max(8, Math.round(avg.g * 0.35)),
+                        b: Math.max(8, Math.round(avg.b * 0.35)),
+                    };
+                } catch { }
+            }
+            ctx.fillStyle = `rgb(${bg.r},${bg.g},${bg.b})`;
+            ctx.fillRect(0, 0, outSize, outSize);
+
+            // váº½ áº£nh vÃ o giá»¯a
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(img, cx, cy, drawW, drawH);
+
+            const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", jpegQuality));
+            if (!blob) return originalFile;
+
+            return new File([blob], (originalFile.name || "image").replace(/\.[^.]+$/, "") + ".jpg", {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+            });
+        }
+
+
+        async function compressImage(inputFile) {
+            // normalize HEIC -> JPEG (náº¿u cÃ³)
+            let file = await normalize_HEIC_to_JPEG(inputFile);
+
+            if (!(file.type || "").startsWith("image/")) return { file, compressed: false };
+            if (file.size <= MAX_IMAGE_BYTES) return { file, compressed: false };
+            if (typeof Compressor !== "function") throw new Error("ThÆ° viá»n nÃ©n áº£nh chÆ°a ÄÆ°á»£c táº£i.");
+
+            const supportWebp = isWebpSupported();
+            const mimeType = supportWebp ? "image/webp" : (file.type || "image/jpeg");
+            const convertSize = supportWebp ? Infinity : 0; // Ã©p convert sang webp náº¿u há» trá»£
+
+            let quality = 0.9;
+            let attempts = 0;
+            const maxAttempts = 10;
+
+            return await new Promise((resolve, reject) => {
+                const attempt = () => {
+                    attempts++;
+
+                    new Compressor(file, {
+                        quality,
+                        mimeType,
+                        convertSize,
+                        success(result) {
+                            const outType = result.type || mimeType;
+
+                            // Compressor tráº£ Blob/File -> chuáº©n hoÃ¡ vá» File
+                            const ext =
+                                outType.includes("webp") ? ".webp" :
+                                    outType.includes("png") ? ".png" : ".jpg";
+
+                            const outName = string_normalization(inputFile.name) + ext;
+
+                            const outFile = (result instanceof File)
+                                ? result
+                                : new File([result], outName, { type: outType, lastModified: Date.now() });
+
+                            if (outFile.size <= MAX_IMAGE_BYTES) {
+                                return resolve({ file: outFile, compressed: true });
+                            }
+
+                            // chÆ°a Äáº¡t -> giáº£m quality vÃ  thá»­ láº¡i
+                            if (attempts >= maxAttempts || quality <= 0.15) {
+                                return reject(new Error("KhÃ´ng thá» nÃ©n áº£nh xuá»ng dÆ°á»i 1MB (best-effort)."));
+                            }
+
+                            file = outFile;
+                            quality = Math.max(0.15, quality - 0.1);
+                            attempt();
+                        },
+                        error(err) {
+                            reject(err instanceof Error ? err : new Error(String(err)));
+                        },
+                    });
+                };
+
+                attempt();
+            });
+        }
+
+        function openCropModal() {
+            cropModal.classList.remove("hidden");
+        }
+
+        function closeCropModal() {
+            cropModal.classList.add("hidden");
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+
+            }
+            cropImageElement.src = "";
+        }
+
+        function cancelCrop() {
+            if (_pendingReject) _pendingReject(new Error("User cancelled crop"));
+            _pendingResolve = _pendingReject = null;
+
+            closeCropModal();
+        }
+
+        async function preparePickedFile(f) {
+            if (!f) return;
+
+            try {
+                const image_validate = (f.type || "").startsWith("image/") || checkHeicFile(f);
+
+                if (image_validate) {
+                    showLoader("Äang chuáº©n hoÃ¡ áº£nhâ¦");
+                    let normalized = await normalize_HEIC_to_JPEG(f);
+
+                    const needCrop = await new Promise((resolve) => {
+                        const img = new Image();
+
+                        // chuáº©n bá» 
+                        img.onload = () => resolve(img.naturalWidth !== img.naturalHeight);
+                        img.onerror = () => resolve(false);
+
+                        // load áº£nh vÃ o Image Object
+                        img.src = URL.createObjectURL(normalized);
+                    });
+
+                    hideLoader();
+
+                    // if (needCrop) {
+                    //     await show_crop_media_popup(normalized);
+                    //     normalized = await crop_image(normalized);
+                    //     closeCropModal();
+                    // }
+                    if (needCrop) {
+                        const choice = await show_crop_media_popup(normalized); // "crop" | "nocrop"
+
+                        if (choice === "nocrop") {
+                            showLoader("Äang táº¡o ná»n 1:1â¦");
+                            normalized = await buildPaddedSquareFile(normalized, { mode: "tint" }); // hoáº·c "black"
+                            hideLoader();
+
+                            // payload bÃ¡o backend ÄÃ¢y lÃ  pad chá»© khÃ´ng crop
+                            mediaCropPayload = { type: "image", padded: true, note: "square_pad_client" };
+                        } else {
+                            normalized = await crop_image(normalized);
+                            // mediaCropPayload ÄÃ£ ÄÆ°á»£c set trong cropConfirm handler (báº¡n ÄÃ£ cÃ³ rá»i)
+                        }
+
+                        closeCropModal();
+                    }
+
+                    showLoader("Äang nÃ©n áº£nhâ¦");
+                    const { file, compressed } = await compressImage(normalized);
+                    hideLoader();
+
+                    setFile(file, compressed);
+                    return;
+                }
+
+                setFile(f, false);
+            } catch (e) {
+                hideLoader();
+                // náº¿u user cancel crop thÃ¬ thÃ´i, khÃ´ng lÃ m gÃ¬
+                if (String(e?.message || "").toLowerCase().includes("cancel")) return;
+
+                alert(e?.message || "Lá»i xá»­ lÃ½ áº£nh.");
+                setFile(f, false);
+            }
+        }
+
+        function evenize(n) { return n - (n % 2); }
+        function clamp(v, a, b) { return Math.max(a, Math.min(v, b)); }
+
+        function getVideoContentRect() {
+            // Rect cá»§a box preview (vuÃ´ng)
+            const vr = vidPreview.getBoundingClientRect();
+            const vw = vidPreview.videoWidth;
+            const vh = vidPreview.videoHeight;
+            if (!vw || !vh) return null;
+
+            // object-contain: scale theo cáº¡nh nhá» hÆ¡n
+            const scale = Math.min(vr.width / vw, vr.height / vh);
+            const dispW = vw * scale;
+            const dispH = vh * scale;
+
+            const offsetX = (vr.width - dispW) / 2;
+            const offsetY = (vr.height - dispH) / 2;
+
+            return {
+                left: vr.left + offsetX,
+                top: vr.top + offsetY,
+                width: dispW,
+                height: dispH,
+                scale
+            };
+        }
+
+        // function calculate_video_displayed_rectangle(el){
+        //     const vr = el.getBoundingClientRect();
+        //     const vw = el.videoWidth, vh = el.videoHeight;
+        //     if (!vw || !vh) return null;
+
+        //     // object-contain mapping
+        //     const scale = Math.min(vr.width / vw, vr.height / vh);
+        //     const dispW = vw * scale;
+        //     const dispH = vh * scale;
+        //     const offsetX = (vr.width - dispW) / 2;
+        //     const offsetY = (vr.height - dispH) / 2;
+
+        //     return { left: vr.left + offsetX, top: vr.top + offsetY, width: dispW, height: dispH, scale, vr };
+        // }
+        function calculate_video_displayed_rectangle(el, zoom = 1) {
+            const vr = el.getBoundingClientRect();
+            const vw = el.videoWidth, vh = el.videoHeight;
+            if (!vw || !vh) return null;
+
+            // base object-contain scale
+            const base = Math.min(vr.width / vw, vr.height / vh);
+
+            // include CSS transform zoom
+            const scale = base * (Number(zoom) || 1);
+
+            const dispW = vw * scale;
+            const dispH = vh * scale;
+
+            const offsetX = (vr.width - dispW) / 2;
+            const offsetY = (vr.height - dispH) / 2;
+
+            return { left: vr.left + offsetX, top: vr.top + offsetY, width: dispW, height: dispH, scale, vr };
+        }
+
+        function initVideoCropBoxModal() {
+            // const content = calculate_video_displayed_rectangle(videoCropPlayer);
+            const content = calculate_video_displayed_rectangle(videoCropPlayer, videoCropScale);
+            if (!content) return;
+
+            const vw = videoCropPlayer.videoWidth;
+            const vh = videoCropPlayer.videoHeight;
+            const shortEdge = Math.min(vw, vh);
+
+            // size in display pixels (square of shortEdge)
+            const size = Math.round(shortEdge * content.scale);
+
+            // center inside displayed content
+            const leftInContent = Math.round((content.width - size) / 2);
+            const topInContent = Math.round((content.height - size) / 2);
+
+            // convert to wrapper coords (relative to video element box)
+            const wrapperRect = content.vr;
+            const offsetX = content.left - wrapperRect.left;
+            const offsetY = content.top - wrapperRect.top;
+
+            videoCropBoxModal.style.width = size + "px";
+            videoCropBoxModal.style.height = size + "px";
+            videoCropBoxModal.style.left = (offsetX + leftInContent) + "px";
+            videoCropBoxModal.style.top = (offsetY + topInContent) + "px";
+        }
+
+        function refreshVideoCropDraft() {
+            // const content = calculate_video_displayed_rectangle(videoCropPlayer);
+            const content = calculate_video_displayed_rectangle(videoCropPlayer, videoCropScale);
+            if (!content) return;
+
+            const cr = videoCropBoxModal.getBoundingClientRect();
+            const relLeft = cr.left - content.left;
+            const relTop = cr.top - content.top;
+
+            const vw = videoCropPlayer.videoWidth;
+            const vh = videoCropPlayer.videoHeight;
+            const shortEdge = Math.min(vw, vh);
+
+            let x = Math.round(relLeft / content.scale);
+            let y = Math.round(relTop / content.scale);
+            let w = shortEdge;
+            let h = shortEdge;
+
+            x = clamp(x, 0, vw - w);
+            y = clamp(y, 0, vh - h);
+
+            x = evenize(x); y = evenize(y); w = evenize(w); h = evenize(h);
+
+            videoCropDraft = {
+                type: "video",
+                crop: { x, y, w, h },
+                video: { videoWidth: vw, videoHeight: vh },
+                view: { scale: videoCropScale }
+            };
+
+            console.log("draft", { x, y, w, h, vw, vh, maxY: vh - h });
+        }
+
+        function renderVideoCropBoxFromDraft() {
+            if (!videoCropDraft) return;
+
+            // const content = calculate_video_displayed_rectangle(videoCropPlayer);
+            const content = calculate_video_displayed_rectangle(videoCropPlayer, videoCropScale);
+            if (!content) return;
+
+            const { x, y, w } = videoCropDraft.crop;
+
+            // size hiá»n thá» theo contain (zoom khÃ´ng lÃ m Äá»i mapping pixel gá»c)
+            const size = Math.round(w * content.scale);
+
+            // toáº¡ Äá» hiá»n thá» theo contain
+            const leftInContent = Math.round(x * content.scale);
+            const topInContent = Math.round(y * content.scale);
+
+            const wrapperRect = content.vr;
+            const offsetX = content.left - wrapperRect.left;
+            const offsetY = content.top - wrapperRect.top;
+
+            videoCropBoxModal.style.width = size + "px";
+            videoCropBoxModal.style.height = size + "px";
+            videoCropBoxModal.style.left = (offsetX + leftInContent) + "px";
+            videoCropBoxModal.style.top = (offsetY + topInContent) + "px";
+        }
+
+        // async function get_suitable_frame(videoEl, imgEl, {
+        //     tries = 12,           // thá»­ tá»i Äa 12 frame
+        //     start = 0.15,         // trÃ¡nh ÄÃºng frame 0.00
+        //     endPad = 0.2,         // trÃ¡nh sÃ¡t cuá»i
+        //     quality = 0.85
+        // } = {}) {
+        async function get_suitable_frame(videoEl, imgEl, {
+            tries = 12,
+            start = 0.15,
+            endPad = 0.2,
+            quality = 0.85,
+            outSize = 1080,                 // thumbnail vuÃ´ng
+            getCrop = null                 // () => {x,y,w,h} | null
+        } = {}) {
+            // Äá»£i metadata Äá» cÃ³ duration + kÃ­ch thÆ°á»c
+            await new Promise(res => {
+                if (videoEl.readyState >= 1) return res();
+                videoEl.addEventListener("loadedmetadata", res, { once: true });
+            });
+
+            const dur = videoEl.duration || 0;
+            const vw = videoEl.videoWidth, vh = videoEl.videoHeight;
+            if (!vw || !vh) return;
+
+            const canvas = document.createElement("canvas");
+            canvas.width = outSize;
+            canvas.height = outSize;
+            const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+            const resolveCrop = () => {
+                const c = typeof getCrop === "function" ? getCrop() : null;
+                if (c && c.w > 0 && c.h > 0) return c;
+
+                // auto crop vuÃ´ng giá»¯a náº¿u chÆ°a cÃ³ payload
+                const side = Math.min(vw, vh);
+                return {
+                    x: Math.floor((vw - side) / 2),
+                    y: Math.floor((vh - side) / 2),
+                    w: side,
+                    h: side
+                };
+            };
+
+            // táº¡o danh sÃ¡ch thá»i Äiá»m cáº§n thá»­ (ráº£i Äá»u + Æ°u tiÃªn giá»¯a)
+            const safeEnd = Math.max(0, dur - endPad);
+            const tList = [];
+            if (dur > 0.6) {
+                // Æ°u tiÃªn giá»¯a trÆ°á»c (hay cÃ³ ná»i dung)
+                tList.push(Math.min(Math.max(dur * 0.5, start), safeEnd));
+                // ráº£i Äá»u
+                for (let k = 1; k < tries; k++) {
+                    const t = start + (safeEnd - start) * (k / (tries - 1));
+                    tList.push(Math.min(Math.max(t, start), safeEnd));
+                }
+            } else {
+                // video quÃ¡ ngáº¯n: thá»­ vÃ i má»c nhá»
+                tList.push(0);
+                tList.push(Math.min(0.1, dur));
+                tList.push(Math.min(0.2, dur));
+            }
+
+            const seekTo = (t) => new Promise(res => {
+                const onSeeked = () => {
+                    videoEl.removeEventListener("seeked", onSeeked);
+                    res();
+                };
+                videoEl.addEventListener("seeked", onSeeked);
+                videoEl.currentTime = t;
+            });
+
+            for (const t of tList) {
+                await seekTo(t);
+
+                // váº½ frame lÃªn canvas
+                // ctx.drawImage(videoEl, 0, 0, vw, vh);
+                const c = resolveCrop();
+
+                // váº½ ÄÃºng vÃ¹ng crop lÃªn canvas vuÃ´ng
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = "high";
+                ctx.drawImage(
+                    videoEl,
+                    c.x, c.y, c.w, c.h,        // source rect (pixel gá»c)
+                    0, 0, outSize, outSize     // dest rect (vuÃ´ng)
+                );
+
+                // kiá»m tra frame cÃ³ âÄÃ¡ng dÃ¹ngâ khÃ´ng
+                const darkMean = 18;        // mean < 18 -> gáº§n nhÆ° Äen
+                const brightMean = 237;     // mean > 237 -> gáº§n nhÆ° tráº¯ng
+                const minStd = 10;
+
+                // const darkMean: 20;
+                // const brightMean: 235;
+                // const minStd: 9;
+
+                // Láº¥y máº«u nhá» cho nhanh (downscale)
+                const sampleW = 64, sampleH = 64;
+                const tmp = document.createElement("canvas");
+                tmp.width = sampleW; tmp.height = sampleH;
+                const tctx = tmp.getContext("2d", { willReadFrequently: true });
+                tctx.drawImage(canvas, 0, 0, sampleW, sampleH);
+
+                const { data } = tctx.getImageData(0, 0, sampleW, sampleH);
+
+                let n = 0;
+                let sum = 0, sumSq = 0;
+
+                // bÆ°á»c nháº£y 4 byte / pixel; cÃ³ thá» skip bá»t pixel Äá» nhanh hÆ¡n
+                for (let i = 0; i < data.length; i += 16) { // skip 4 pixels má»i láº§n (tá»i Æ°u)
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+
+                    // luminance (Rec.709)
+                    const y = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+                    sum += y;
+                    sumSq += y * y;
+                    n++;
+                }
+
+                const mean = sum / n;
+                const variance = Math.max(0, sumSq / n - mean * mean);
+                const std = Math.sqrt(variance);
+
+                const isSuitable =
+                    mean >= darkMean &&
+                    mean <= brightMean &&
+                    std >= minStd;
+
+                if (isSuitable) {
+                    imgEl.src = canvas.toDataURL("image/jpeg", quality);
+                    return true;
+                }
+            }
+
+            // fallback: váº«n tráº£ frame hiá»n táº¡i dÃ¹ fail (Äá»¡ trá»ng)
+            // ctx.drawImage(videoEl, 0, 0, vw, vh);
+            const c = resolveCrop();
+
+            // váº½ ÄÃºng vÃ¹ng crop lÃªn canvas vuÃ´ng
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = "high";
+            ctx.drawImage(
+                videoEl,
+                c.x, c.y, c.w, c.h,        // source rect (pixel gá»c)
+                0, 0, outSize, outSize     // dest rect (vuÃ´ng)
+            );
+
+            imgEl.src = canvas.toDataURL("image/jpeg", quality);
+            return false;
+        }
+
+        async function setFile(file, wasCompressed = false) {
+            selectedFile = file || null;
+            mediaCropPayload = null;
+
+            if (!selectedFile) {
+                filePreviewWrap.classList.add("hidden");
+                dropHeader.classList.remove("hidden");
+                imgPreview.classList.add("hidden");
+                vidPreview.classList.add("hidden");
+                imgPreview.src = "";
+                vidPreview.src = "";
+
+                // reset preview tweaks
+                vidPreview.style.transform = "";
+                vidPreview.style.transformOrigin = "";
+                vidPreview.style.objectPosition = "";
+                vidPreview.classList.remove("object-cover");
+                vidPreview.classList.add("object-contain");
+                vidPreview.controls = true;
+                vidPreview.classList.remove("pointer-events-none");
+
+                mediaGrid.className = "grid gap-3 max-w-[360px] mx-auto"; // reset
+                imgBox.classList.remove("hidden");
+                vidBox.classList.add("hidden");
+
+                touchConfirm();
+                return;
+            }
+
+            fileMeta.textContent = selectedFile.name || "ÄÃ£ chá»n file";
+            // fileMeta2.textContent = `${selectedFile.type || "unknown"} â¢ ${formatBytes(selectedFile.size)}`;
+            fileMeta2.textContent = `${selectedFile.type || "unknown"} â¢ ${wasCompressed ? "ÄÃ£ nÃ©n xuá»ng " : ""}${formatBytes(selectedFile.size)}`;
+
+            const url = URL.createObjectURL(selectedFile);
+
+            if (selectedFile.type && selectedFile.type.startsWith("video/")) {
+                // Video preview (inside shared square box)
+                // vidPreview.src = url;
+                // vidPreview.load();
+                // vidPreview.classList.remove("hidden");
+                // imgPreview.classList.add("hidden");
+                // imgPreview.src = "";
+
+                // layout 2 cá»t
+                mediaGrid.className = "grid gap-3 grid-cols-2"; // sm:grid-cols-2
+
+                // hiá»n cáº£ 2 box
+                imgBox.classList.remove("hidden");
+                vidBox.classList.remove("hidden");
+
+                // gÃ¡n video Äá» láº¥y metadata (W/H) => quyáº¿t Äá»nh má» popup crop
+                vidPreview.src = url;
+                vidPreview.load();
+                vidPreview.classList.remove("hidden");
+
+                // thumbnail bÃªn trÃ¡i (khÃ´ng áº£nh hÆ°á»ng popup)
+                imgPreview.classList.remove("hidden");
+                // captureVideoThumb(vidPreview, imgPreview);
+                // get_suitable_frame(vidPreview, imgPreview);
+                get_suitable_frame(vidPreview, imgPreview, {
+                    outSize: 1080,
+                    getCrop: () => {
+                        // Æ°u tiÃªn payload videoCropDraft / mediaCropPayload náº¿u ÄÃ£ cÃ³
+                        const c = mediaCropPayload?.type === "video" ? mediaCropPayload.crop : null;
+                        return c || null;
+                    }
+                });
+
+            } else {
+                // Image preview
+                // imgPreview.src = url;
+                // imgPreview.classList.remove("hidden");
+                // vidPreview.classList.add("hidden");
+                // vidPreview.removeAttribute("src");
+                // vidPreview.load();
+                // layout 1 cá»t
+                mediaGrid.className = "grid gap-3 max-w-[360px] mx-auto";
+
+                // only image box
+                vidBox.classList.add("hidden");
+                imgBox.classList.remove("hidden");
+
+                // show image
+                imgPreview.src = url;
+                imgPreview.classList.remove("hidden");
+
+                // hide video
+                vidPreview.classList.add("hidden");
+                vidPreview.removeAttribute("src");
+                vidPreview.load();
+
+                // If image is already square, build full-crop payload for upload
+                const mediaCropPayload = await (async () => {
+                    return new Promise((resolve) => {
+                        const im = new Image();
+                        im.onload = () => {
+                            const w = im.naturalWidth;
+                            const h = im.naturalHeight;
+                            if (!w || !h) return resolve(null);
+
+                            const s = evenize(Math.min(w, h));
+                            resolve({
+                                type: "image",
+                                crop: {
+                                    x: evenize((w - s) / 2),
+                                    y: evenize((h - s) / 2),
+                                    w: s,
+                                    h: s,
+                                },
+                                image: { imageWidth: w, imageHeight: h },
+                            });
+                        };
+                        im.onerror = () => resolve(null);
+                        im.src = url;
+                    });
+                })();
+
+                touchConfirm();
+            }
+
+            filePreviewWrap.classList.remove("hidden");
+            dropHeader.classList.add("hidden");
+            touchConfirm();
+        }
+
+        // =========================
+        // Upload Variables
+        // =========================
+        const uploadInput = document.getElementById("uploadInput");
+        const dropZone = document.getElementById("dropZone");
+        const dropHeader = document.getElementById("dropHeader");
+
+        const filePreviewWrap = document.getElementById("filePreviewWrap");
+        const fileMeta = document.getElementById("fileMeta");
+        const fileMeta2 = document.getElementById("fileMeta2");
+
+        const imgPreview = document.getElementById("imgPreview");
+        const vidPreview = document.getElementById("vidPreview");
+
+        const mediaGrid = document.getElementById("mediaGrid");
+        const imgBox = document.getElementById("imgBox");
+        const vidBox = document.getElementById("vidBox");
+
+        const cropModal = document.getElementById("cropModal");
+        const cropImageElement = document.getElementById("cropImage");
+        const cropClose = document.getElementById("cropClose");
+        const cropCancel = document.getElementById("cropCancel");
+        const cropConfirm = document.getElementById("cropConfirm");
+        const cropSkip = document.getElementById("cropSkip");
+
+        const videoCropModal = document.getElementById("videoCropModal");
+        const videoCropPlayer = document.getElementById("videoCropPlayer");
+        const videoCropBoxModal = document.getElementById("videoCropBoxModal");
+
+        const videoCropClose = document.getElementById("videoCropClose");
+        const videoCropCancel = document.getElementById("videoCropCancel");
+        const videoCropConfirm = document.getElementById("videoCropConfirm");
+
+        const videoCropZoom = document.getElementById("videoCropZoom");
+        const videoCropZoomVal = document.getElementById("videoCropZoomVal");
+        const videoCropCenter = document.getElementById("videoCropCenter");
+        const videoCropReset = document.getElementById("videoCropReset");
+
+        const removeFileBtn = document.getElementById("removeFileBtn");
+
+        let selectedFile = null;
+
+        // Crop payload JSON to send with upload (image/video).
+        // - Square media: full crop {x:0,y:0,w:...,h:...}
+        // - Non-square: user-selected square region (pixel in original media)
+        let mediaCropPayload = null;
+
+        // Square crop with CropperJS
+        let cropper = null;
+        let _pendingResolve = null;
+        let _pendingReject = null;
+
+        let videoCropDraft = null;        // draft payload while editing in modal
+        let videoCropScale = 1;           // zoom value in modal (view only)
+
+        // Drag square box inside modal
+        let vDragging = false, vStartX = 0, vStartY = 0, vStartLeft = 0, vStartTop = 0;
+
+        const MAX_IMAGE_BYTES = 1 * 1024 * 1024; // 1MB
+
+        document.addEventListener("paste", (event) => {
+            const items = event.clipboardData?.items || [];
+            for (const item of items) {
+                if (item.kind !== "file") continue;
+
+                const file = item.getAsFile();
+                if (!file) continue;
+
+                // validate extension (giá»ng Äoáº¡n báº¡n ÄÆ°a)
+                if (!/\.(png|jpg|jpeg|webp|heic|heif|gif|mp4|mov)$/i.test(file.name || "")) continue;
+
+                // (tuá»³ chá»n) validate size 50MB nhÆ° UI báº¡n ghi
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast?.("warning", "Cáº£nh bÃ¡o", "File quÃ¡ lá»n (trÃªn 50MB).");
+                    return;
+                }
+
+                // set vÃ o input.files Äá» má»i thá»© thá»ng nháº¥t 1 luá»ng
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                uploadInput.files = dt.files;
+
+                // gá»i flow xá»­ lÃ½ cá»§a báº¡n
+                preparePickedFile(file);
+                break; // chá» láº¥y 1 file
+            }
+        });
+
+        dropZone.addEventListener("click", (e) => {
+            if (e.target.closest("#vidBox") || e.target.closest("#imgBox") || e.target.closest("video")) return;
+
+            uploadInput.click();
+        });
+
+        uploadInput.addEventListener("change", (e) => {
+            const f = e.target.files && e.target.files[0];
+
+            if (f) preparePickedFile(f);
+        });
+
+        // drag & drop
+        ["dragenter", "dragover"].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                dropZone.classList.add("ring-2", "ring-black/30");
+            });
+        });
+
+        ["dragleave", "drop"].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                dropZone.classList.remove("ring-2", "ring-black/30");
+            });
+        });
+
+        dropZone.addEventListener("drop", (e) => {
+            const files = e.dataTransfer?.files || [];
+            for (const file of files) {
+                if (!file) continue;
+
+                if (!/\.(png|jpg|jpeg|webp|heic|heif|gif|mp4|mov)$/i.test(file.name || "")) continue;
+
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast?.("warning", "Cáº£nh bÃ¡o", "File quÃ¡ lá»n (trÃªn 50MB).");
+                    return;
+                }
+
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                uploadInput.files = dt.files;
+
+                preparePickedFile(file);
+                break; // chá» láº¥y 1 file
+            }
+        });
+
+        removeFileBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            uploadInput.value = "";
+
+            setFile(null);
+        });
+
+        cropClose?.addEventListener("click", cancelCrop);
+        cropCancel?.addEventListener("click", cancelCrop);
+        cropConfirm?.addEventListener("click", async () => {
+            try {
+                // capture crop JSON (pixel in original image)
+                if (cropper) {
+                    const d = cropper.getData(true);
+                    const imd = cropper.getImageData();
+                    const naturalW = Math.round(imd?.naturalWidth || 0);
+                    const naturalH = Math.round(imd?.naturalHeight || 0);
+
+                    let x = evenize(Math.max(0, Math.round(d.x || 0)));
+                    let y = evenize(Math.max(0, Math.round(d.y || 0)));
+                    let w = evenize(Math.max(2, Math.round(d.width || 0)));
+                    let h = evenize(Math.max(2, Math.round(d.height || 0)));
+
+                    // enforce square
+                    const s = evenize(Math.min(w, h));
+                    w = h = s;
+
+                    // clamp inside original
+                    if (naturalW && x + w > naturalW) x = evenize(Math.max(0, naturalW - w));
+                    if (naturalH && y + h > naturalH) y = evenize(Math.max(0, naturalH - h));
+
+                    mediaCropPayload = {
+                        type: "image",
+                        crop: { x, y, w, h },
+                        image: { imageWidth: naturalW, imageHeight: naturalH }
+                    };
+                }
+
+                // resolve OK so caller continues (it will export cropped file + compress as before)
+                if (_pendingResolve) _pendingResolve("crop");
+
+                updateConfirm();
+            } catch (e) {
+                if (_pendingReject) _pendingReject(e);
+            } finally {
+                _pendingResolve = _pendingReject = null;
+            }
+        });
+        cropSkip?.addEventListener("click", () => {
+            if (_pendingResolve) _pendingResolve("nocrop");
+            _pendingResolve = _pendingReject = null;
+
+            closeCropModal();
+            updateConfirm();
+        });
+
+        videoCropConfirm.addEventListener("click", () => {
+            mediaCropPayload = videoCropDraft;
+
+            get_suitable_frame(vidPreview, imgPreview, {
+                outSize: 1080,
+                getCrop: () => mediaCropPayload?.crop || null
+            });
+
+            // Apply crop to outside preview (no transform hack; use object-position)
+            if (!mediaCropPayload || mediaCropPayload.type !== "video") return;
+
+            const { x, y, w, h } = mediaCropPayload.crop;
+            const vw = mediaCropPayload.video.videoWidth;
+            const vh = mediaCropPayload.video.videoHeight;
+
+            const cx = x + w / 2;
+            const cy = y + h / 2;
+
+            const px = (cx / vw) * 100;
+            const py = (cy / vh) * 100;
+
+            vidPreview.style.transform = "";
+            vidPreview.style.transformOrigin = "";
+            vidPreview.classList.remove("object-contain");
+            vidPreview.classList.add("object-cover");
+            vidPreview.style.objectPosition = `${px}% ${py}%`;
+
+            videoCropModal.classList.add("hidden");
+            updateConfirm();
+        });
+
+        videoCropCancel.addEventListener("click", () => {
+            videoCropModal.classList.add("hidden")
+
+            updateConfirm();
+        });
+
+        videoCropClose.addEventListener("click", () => {
+            videoCropModal.classList.add("hidden");
+
+            updateConfirm();
+        });
+
+        videoCropCenter.addEventListener("click", () => {
+            // canh giá»¯a theo pixel gá»c + scale hiá»n táº¡i (khÃ´ng lá»ch khi zoom)
+            const vw = videoCropPlayer.videoWidth;
+            const vh = videoCropPlayer.videoHeight;
+            if (!vw || !vh) return;
+
+            const shortEdge = Math.min(vw, vh);
+            const x = Math.round((vw - shortEdge) / 2);
+            const y = Math.round((vh - shortEdge) / 2);
+
+            // cáº­p nháº­t draft trÆ°á»c (pixel gá»c)
+            videoCropDraft = {
+                type: "video",
+                crop: { x: evenize(x), y: evenize(y), w: evenize(shortEdge), h: evenize(shortEdge) },
+                video: { videoWidth: vw, videoHeight: vh },
+                view: { scale: videoCropScale }
+            };
+
+            renderVideoCropBoxFromDraft();
+            updateConfirm();
+        });
+
+        videoCropReset.addEventListener("click", () => {
+            videoCropScale = 1;
+            // videoCropZoom.value = "1";
+            // videoCropZoomVal.textContent = "1.00";
+
+            // videoCropPlayer.style.transformOrigin = "center center";
+            // videoCropPlayer.style.transform = `scale(${videoCropScale})`;
+
+            initVideoCropBoxModal();
+            refreshVideoCropDraft();
+            renderVideoCropBoxFromDraft();
+        });
+
+        // khi cÃ³ metadata thÃ¬ má»i biáº¿t video cÃ³ vuÃ´ng khÃ´ng
+        vidPreview.onloadedmetadata = async () => {
+            const vw = vidPreview.videoWidth;
+            const vh = vidPreview.videoHeight;
+
+            // video vuÃ´ng => khá»i má» modal, set payload full crop luÃ´n
+            if (vw && vh && vw === vh) {
+                mediaCropPayload = {
+                    type: "video",
+                    crop: { x: 0, y: 0, w: evenize(vw), h: evenize(vh) },
+                    video: { videoWidth: vw, videoHeight: vh }
+                };
+            } else if (vw && vh) {
+                // video khÃ´ng vuÃ´ng => Má» POPUP CROP (nhÆ° cÅ©)
+                // openVideoCropModalForFile(selectedFile);
+                const url = URL.createObjectURL(selectedFile);
+                videoCropPlayer.src = url;
+                // videoCropPlayer.pause();
+                videoCropPlayer.currentTime = 0;
+
+                videoCropScale = 1;
+                // videoCropZoom.value = "1";
+                // videoCropZoomVal.textContent = "1.00";
+
+                // videoCropPlayer.style.transformOrigin = "center center";
+                // videoCropPlayer.style.transform = `scale(${videoCropScale})`;
+
+                videoCropModal.classList.remove("hidden");
+
+                await new Promise((res) => {
+                    videoCropPlayer.onloadedmetadata = () => res();
+                });
+
+                initVideoCropBoxModal();
+                refreshVideoCropDraft();
+                renderVideoCropBoxFromDraft();
+            }
+
+            touchConfirm();
+        };
+
+        videoCropBoxModal.addEventListener("pointerdown", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            vDragging = true;
+            videoCropBoxModal.setPointerCapture(e.pointerId);
+
+            vStartX = e.clientX;
+            vStartY = e.clientY;
+            vStartLeft = parseFloat(videoCropBoxModal.style.left || "0");
+            vStartTop = parseFloat(videoCropBoxModal.style.top || "0");
+        });
+
+        window.addEventListener("pointermove", (e) => {
+            if (!vDragging) return;
+
+            // const content = calculate_video_displayed_rectangle(videoCropPlayer);
+            const content = calculate_video_displayed_rectangle(videoCropPlayer, videoCropScale);
+            if (!content) return;
+
+            const w = videoCropBoxModal.offsetWidth;
+            const h = videoCropBoxModal.offsetHeight;
+
+            const dx = e.clientX - vStartX;
+            const dy = e.clientY - vStartY;
+
+            const wrapperRect = content.vr;
+            const offsetX = content.left - wrapperRect.left;
+            const offsetY = content.top - wrapperRect.top;
+
+            let left = vStartLeft + dx;
+            let top = vStartTop + dy;
+
+            left = clamp(left, offsetX, offsetX + content.width - w);
+            top = clamp(top, offsetY, offsetY + content.height - h);
+
+            videoCropBoxModal.style.left = left + "px";
+            videoCropBoxModal.style.top = top + "px";
+
+            refreshVideoCropDraft();
+        });
+
+        window.addEventListener("pointerup", () => {
+            vDragging = false;
+        });
+    </script>
+
+    <script>
+        // =========================
+        // Caption script (REWRITE: minimal, no helper functions)
+        // =========================
+        const captionText = document.getElementById("captionText");
+        const captionSelectedBadge = document.getElementById("captionSelectedBadge");
+
+        const captionPills = document.getElementById("captionPills");
+        const captionPillsMedia = document.getElementById("captionPillsMedia");
+
+        const captionExtra = document.getElementById("captionExtra");
+        const captionExtraInput = document.getElementById("captionExtraInput");
+        const captionExtraHint = document.getElementById("captionExtraHint");
+
+        const captionExtraStars = document.getElementById("captionExtraStars");
+        const captionExtraStarsRange = document.getElementById("captionExtraStarsRange");
+        const captionExtraStarsValue = document.getElementById("captionExtraStarsValue");
+
+        const captionExtraColors = document.getElementById("captionExtraColors");
+        const colorTop = document.getElementById("colorTop");
+        const colorBottom = document.getElementById("colorBottom");
+        const colorText = document.getElementById("colorText");
+
+        const customCaptionOptions = document.getElementById("customCaptionOptions");
+        const customCaptionOptionsHint = document.getElementById("customCaptionOptionsHint");
+        const customCaptionLayoutNewline = document.getElementById("customCaptionLayoutNewline");
+        const customCaptionLayoutScroll = document.getElementById("customCaptionLayoutScroll");
+        const customCaptionColorDefault = document.getElementById("customCaptionColorDefault");
+        const customCaptionColorCustom = document.getElementById("customCaptionColorCustom");
+        const customCaptionColorPreset = document.getElementById("customCaptionColorPreset");
+        const customCaptionPresetWrap = document.getElementById("customCaptionPresetWrap");
+        const customCaptionPresetPills = document.getElementById("customCaptionPresetPills");
+        const weatherCaptionPresetWrap = document.getElementById("weatherCaptionPresetWrap");
+        const weatherCaptionPresetPills = document.getElementById("weatherCaptionPresetPills");
+
+        const captionExtraSelect = document.getElementById("captionExtraSelect");
+
+        const reunificationDayPills = document.getElementById("reunificationDayPills");
+        const pillFlagVN = document.getElementById("pillFlagVN");
+        const pillFlagMT = document.getElementById("pillFlagMT");
+
+        // ===== Global states (keep as requested) =====
+        let selectedCaptionId = "defaultCaption";
+        let reunificationTheme = "flag_vn";
+
+        let customCaptionPresetId = "sunrise";
+        let customCaptionLayoutMode = "newline";   // "newline" | "scroll"
+        let customCaptionColorMode = "default";    // "default" | "preset" | "custom"
+
+        let weatherCaptionPresetId = "dawn";
+        // let weatherResolvedOk = false;
+        // let weatherLastTempC = null;           // lÆ°u nhiá»t Äá» vá»«a fetch Äá» pill click cáº­p nháº­t captionText
+        let coordinates = null;
+
+        function getLocationData() {
+            return new Promise((resolve) => {
+                if (!("geolocation" in navigator)) {
+                    resolve({
+                        status: "error",
+                        status_code: "NOT_SUPPORTED",
+                        message: "Geolocation is not supported."
+                    });
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        resolve({
+                            status: 'success',
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        });
+                    },
+                    function (error) {
+                        let status_code = "UNKNOWN_ERROR";
+                        let message = "An unknown error occurred.";
+
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                status_code = 'PERMISSION_DENIED';
+                                message = "User denied the request for Geolocation.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                status_code = 'POSITION_UNAVAILABLE';
+                                message = "Location information is unavailable.";
+                                break;
+                            case error.TIMEOUT:
+                                status_code = 'TIMEOUT';
+                                message = "The request to get user location timed out.";
+                                break;
+                        }
+
+                        resolve({
+                            status: 'error',
+                            status_code,
+                            message
+                        });
+                    },
+                    { enableHighAccuracy: false, timeout: 8000, maximumAge: 60_000 }
+                );
+            });
+        }
+
+        // runtime flag
+        let musicResolvedOk = false;
+
+        // Preload image icons (keep)
+        captionTypes.forEach(ct => {
+            const icon = ct.icon;
+            if (icon && typeof icon === "object" && icon.type === "image" && icon.src) {
+                const img = new Image();
+                img.src = icon.src;
+            }
+        });
+
+        // ===== Custom caption: layout / color mode (no helper fn) =====
+        const _btnOn = "bg-[#ffd24a] text-black";
+        const _btnOff = "bg-transparent text-white/80 hover:bg-white/10";
+
+        customCaptionLayoutNewline.addEventListener("click", () => {
+            customCaptionLayoutMode = "newline";
+            customCaptionLayoutNewline.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOn}`;
+            customCaptionLayoutScroll.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+            customCaptionOptionsHint.textContent = "";
+            touchConfirm();
+            recomputePostState();
+        });
+
+        customCaptionLayoutScroll.addEventListener("click", () => {
+            customCaptionLayoutMode = "scroll";
+            customCaptionLayoutNewline.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+            customCaptionLayoutScroll.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOn}`;
+            customCaptionOptionsHint.textContent = "";
+            touchConfirm();
+            recomputePostState();
+        });
+
+        customCaptionColorDefault.addEventListener("click", () => {
+            customCaptionColorMode = "default";
+
+            customCaptionColorDefault.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOn}`;
+            // customCaptionColorPreset.className  = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+            customCaptionColorCustom.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+
+            customCaptionPresetWrap.classList.add("hidden");
+            captionExtraColors.classList.add("hidden");
+
+            touchConfirm();
+            recomputePostState();
+        });
+
+        // customCaptionColorPreset.addEventListener("click", () => {
+        //     customCaptionColorMode = "preset";
+
+        //     customCaptionColorDefault.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+        //     customCaptionColorPreset.className  = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOn}`;
+        //     customCaptionColorCustom.className  = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+
+        //     captionExtraColors.classList.add("hidden");
+        //     customCaptionPresetWrap.classList.remove("hidden");
+
+        //     // render preset pills (inline)
+        //     customCaptionPresetPills.innerHTML = "";
+        //     customCaptionPresets.forEach(p => {
+        //         const b = document.createElement("button");
+        //         b.type = "button";
+
+        //         const isSelected = p.id === customCaptionPresetId;
+        //         b.className = [
+        //             "inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold transition",
+        //             "ring-1 ring-white/10",
+        //             isSelected ? "ring-2 ring-yellow-400" : "hover:ring-white/20"
+        //         ].join(" ");
+        //         b.style.background = `linear-gradient(to bottom, ${p.top}, ${p.bottom})`;
+        //         b.style.color = p.text;
+        //         b.textContent = p.label;
+
+        //         b.addEventListener("click", () => {
+        //             customCaptionPresetId = p.id;
+
+        //             // update selected ring
+        //             [...customCaptionPresetPills.querySelectorAll("button")].forEach(btn => {
+        //                 btn.classList.remove("ring-2", "ring-yellow-400");
+        //                 btn.classList.add("ring-1", "ring-white/10");
+        //             });
+        //             b.classList.remove("ring-1", "ring-white/10");
+        //             b.classList.add("ring-2", "ring-yellow-400");
+
+        //             touchConfirm();
+        //             recomputePostState();
+        //         });
+
+        //         customCaptionPresetPills.appendChild(b);
+        //     });
+
+        //     touchConfirm();
+        //     recomputePostState();
+        // });
+
+        customCaptionColorCustom.addEventListener("click", () => {
+            customCaptionColorMode = "custom";
+
+            customCaptionColorDefault.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+            // customCaptionColorPreset.className  = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOff}`;
+            customCaptionColorCustom.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${_btnOn}`;
+
+            customCaptionPresetWrap.classList.add("hidden");
+            captionExtraColors.classList.remove("hidden");
+
+            touchConfirm();
+            recomputePostState();
+        });
+
+        // sync color pickers -> extra input (keep your behavior)
+        [colorTop, colorBottom, colorText].forEach(el => {
+            el.addEventListener("input", () => {
+                captionExtraInput.value = `${colorTop.value} ${colorBottom.value} ${colorText.value}`;
+
+                touchConfirm();
+                recomputePostState();
+            });
+        });
+
+        // ===== Reunification theme pills (no helper fn) =====
+        pillFlagVN.addEventListener("click", () => {
+            reunificationTheme = "flag_vn";
+
+            const on = "ring-2 ring-[#ffd24a]";
+            const off = "ring-1 ring-white/20 hover:bg-white/90";
+            pillFlagVN.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#910000,#7B0909)] text-[#F6D669] ${on}`;
+            pillFlagMT.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#DA251D,#2596BE)] text-[#F6D669] ${off}`;
+
+            touchConfirm();
+            recomputePostState();
+        });
+
+        pillFlagMT.addEventListener("click", () => {
+            reunificationTheme = "flag_mtgpmn";
+
+            const on = "ring-2 ring-[#ffd24a]";
+            const off = "ring-1 ring-white/20 hover:bg-white/90";
+            pillFlagVN.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#910000,#7B0909)] text-[#F6D669] ${off}`;
+            pillFlagMT.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#DA251D,#2596BE)] text-[#F6D669] ${on}`;
+
+            touchConfirm();
+            recomputePostState();
+        });
+
+        // ===== Inputs =====
+        captionText.addEventListener("input", () => {
+            touchConfirm();
+            recomputePostState();
+        });
+
+        captionExtraStarsRange.addEventListener("input", () => {
+            captionExtraStarsValue.textContent = captionExtraStarsRange.value;
+
+            touchConfirm();
+            recomputePostState();
+        });
+
+        captionExtraSelect.addEventListener("change", () => {
+            const v = (captionExtraSelect.value || "").trim();
+            if (v) captionText.value = v;
+
+            touchConfirm();
+            recomputePostState();
+        });
+
+        captionExtraInput.addEventListener("input", async () => {
+            if (["customCaption", "reviewCaption", "locationCaption"].includes(selectedCaptionId)) return;
+
+            const value = (captionExtraInput.value || "").trim();
+
+            if (selectedCaptionId === "musicCaption") {
+                musicResolvedOk = false;
+
+                if (!value) {
+                    captionExtraHint.textContent = "";
+                    captionExtraHint.className = "mt-1 text-xs text-white/50";
+
+                    touchConfirm();
+                    recomputePostState();
+                    return;
+                }
+
+                const regex = /^https:\/\/open\.spotify\.com\/(track|episode)\/[a-zA-Z0-9]{22}(?:\?.*)?$|^https:\/\/music\.apple\.com\/[a-z]{2}\/(album|song|playlist)\/[^\/]+\/\d+(?:\?i=\d+)?(?:&.*)?$/;
+
+                if (!regex.test(value)) {
+                    captionExtraHint.textContent = "LiÃªn káº¿t khÃ´ng há»£p lá».";
+                    captionExtraHint.className = "mt-1 text-xs text-rose-300";
+                    touchConfirm();
+                    recomputePostState();
+                    return;
+                }
+
+                captionExtraInput.disabled = true;
+
+                try {
+                    captionExtraHint.textContent = "Äang láº¥y thÃ´ng tin bÃ i hÃ¡tâ¦";
+                    captionExtraHint.className = "mt-1 text-xs text-white/60";
+
+                    let res = await fetch(urlServer(), {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("idToken")}`,
+                        },
+                        body: JSON.stringify({
+                            action: "getTrackInfo",
+                            url: value.trim()
+                        }),
+                    });
+
+                    if (res.status !== 200) {
+                        captionExtraHint.textContent = "KhÃ´ng láº¥y ÄÆ°á»£c thÃ´ng tin bÃ i hÃ¡t. Náº¿u ÄÃ¢y lÃ  liÃªn káº¿t Spotify thÃ¬ tá» sáº½ kháº¯c phá»¥c váº¥n Äá» nÃ y sá»m.";
+                        captionExtraHint.className = "mt-1 text-xs text-rose-300";
+                        return;
+                    }
+
+                    res = await res.json();
+
+                    if (res?.success) {
+                        musicResolvedOk = true;
+                        captionText.value = res.data || "";
+                        captionExtraHint.textContent = "";
+                    } else {
+                        captionExtraHint.textContent = "KhÃ´ng tÃ¬m tháº¥y bÃ i hÃ¡t tá»« liÃªn káº¿t.";
+                        captionExtraHint.className = "mt-1 text-xs text-rose-300";
+                    }
+
+                    await showToast("success", "ThÃ nh cÃ´ng", `ÄÃ£ sá»­ dá»¥ng bÃ i hÃ¡t ${res.data || "KhÃ´ng rÃµ tÃªn"} vÃ o caption`);
+                } catch (e) {
+                    captionExtraHint.textContent = "Lá»i khi káº¿t ná»i vá»i mÃ¡y chá»§.";
+                    captionExtraHint.className = "mt-1 text-xs text-rose-300";
+                } finally {
+                    captionExtraInput.disabled = false;
+                    touchConfirm();
+                    recomputePostState();
+                }
+
+                return;
+            }
+
+            // ================= CÃC CAPTION KHÃC DÃNG EXTRA INPUT =================
+            // hiá»n táº¡i chÆ°a cÃ³ logic riÃªng â chá» recompute
+            touchConfirm();
+            recomputePostState();
+        });
+
+        // ===== Page load: render pills in DOMContentLoaded (NO extra functions) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const ct0 = captionTypes.find(x => x.id === selectedCaptionId);
+            captionSelectedBadge.textContent = "Caption: " + (ct0?.label || "Máº·c Äá»nh");
+
+            // init reunification pill UI (inline)
+            const on = "ring-2 ring-[#ffd24a]";
+            const off = "ring-1 ring-white/20 hover:bg-white/90";
+            pillFlagVN.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#910000,#7B0909)] text-[#F6D669] ${reunificationTheme === "flag_vn" ? on : off}`;
+            pillFlagMT.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#DA251D,#2596BE)] text-[#F6D669] ${reunificationTheme === "flag_mtgpmn" ? on : off}`;
+
+            // render main pills
+            captionPills.innerHTML = "";
+            captionTypes.filter(x => (x.category || "main") === "main").forEach(ct => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.dataset.id = ct.id;
+
+                const isSelected = ct.id === selectedCaptionId;
+                btn.className = [
+                    "inline-flex items-center gap-1.5 rounded-full px-4 py-2 ring-1 transition select-none cursor-pointer",
+                    isSelected ? "ring-2 ring-yellow-400" : "hover:opacity-100",
+                    ct.bg || "bg-white/5",
+                    ct.text || "text-white/85",
+                    ct.ring || "ring-white/10",
+                ].join(" ");
+
+                const icon = ct?.icon || null;
+                let iconHtml = "";
+                if (icon) {
+                    if (typeof icon === "string") {
+                        iconHtml = `<span class="text-lg leading-none">${icon}</span>`;
+                    } else if (icon && typeof icon === "object" && icon.type === "image" && icon.src) {
+                        const alt = String(icon.alt || "").replace(/"/g, "&quot;");
+                        const src = String(icon.src).replace(/"/g, "%22");
+                        iconHtml = `<img src="${src}" alt="${alt}" class="w-6 h-6 object-contain select-none pointer-events-none" loading="lazy" decoding="async" referrerpolicy="no-referrer" />`;
+                    }
+                }
+
+                btn.innerHTML = `
+                    ${icon ? `<span class="shrink-0">${iconHtml}</span>` : ''}
+                    <span class="font-semibold">${ct.label}</span>
+                `;
+
+                // ===== effect injection (no new functions) =====
+                if (ct.effect) {
+                    if (ct.effect === "snow") {
+                        // bá»c content Äá» cÃ³ layer tuyáº¿t dÆ°á»i icon + text
+                        const raw = btn.innerHTML;
+
+                        btn.innerHTML = `
+                            <span class="relative block overflow-hidden">
+                                <canvas class="snowFx absolute inset-0 pointer-events-none"></canvas>
+                                <span class="relative z-10 inline-flex items-center gap-1.5">${raw}</span>
+                            </span>
+                        `;
+
+                        // init snow 1 láº§n / pill
+                        const cvs = btn.querySelector("canvas.snowFx");
+                        if (cvs && cvs.dataset.inited !== "1") {
+                            cvs.dataset.inited = "1";
+
+                            const ctx = cvs.getContext("2d");
+                            let w = 0, h = 0;
+                            let flakes = [];
+                            let raf = 0;
+
+                            // set canvas size theo button tháº­t (ÄÃºng tá» lá»)
+                            // (khÃ´ng táº¡o function má»i, lÃ m inline)
+                            {
+                                ctx.shadowBlur = 0;
+                                requestAnimationFrame(() => {
+                                    const r = btn.getBoundingClientRect();
+
+                                    w = Math.max(1, Math.round(r.width));
+                                    h = Math.max(1, Math.round(r.height));
+
+                                    cvs.width = w;
+                                    cvs.height = h;
+
+                                    flakes = Array.from({ length: 45 }, () => ({
+                                        x: Math.random() * w,
+                                        y: Math.random() * h,            // â FULL tá»« top â bottom
+                                        r: Math.random() * 1.4 + 0.8,    // nhá» hÆ¡n, má»m hÆ¡n
+                                        s: Math.random() * 0.6 + 0.2,    // base speed
+                                        drift: (Math.random() * 0.4 + 0.1) * (Math.random() < 0.5 ? -1 : 1)
+                                    }));
+
+                                    // ===== START LOOP AFTER INIT =====
+                                    (function loop() {
+                                        ctx.clearRect(0, 0, w, h);
+
+                                        ctx.fillStyle = "rgba(255,255,255,0.5)";
+                                        ctx.shadowColor = "rgba(255,255,255,0.5)";
+                                        ctx.shadowBlur = 6;
+
+                                        for (let i = 0; i < flakes.length; i++) {
+                                            const f = flakes[i];
+
+                                            ctx.beginPath();
+                                            ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                                            ctx.fill();
+
+                                            // tá»c rÆ¡i
+                                            f.y += f.s * 0.45;
+                                            f.x += f.drift * 0.12;
+
+                                            // reset ÄÃºng tá»« TRÃN XUá»NG
+                                            if (f.y > h + 6) {
+                                                f.y = -6;
+                                                f.x = Math.random() * w;
+                                            }
+
+                                            if (f.x < -6) f.x = w + 6;
+                                            if (f.x > w + 6) f.x = -6;
+                                        }
+
+                                        ctx.shadowBlur = 0;
+                                        raf = requestAnimationFrame(loop);
+                                    })();
+                                });
+                            }
+
+                            // lÆ°u raf Äá» sau nÃ y náº¿u báº¡n muá»n stop theo caption selection
+                            btn.dataset.snowRaf = String(raf);
+                        }
+                    }
+
+                    // sau nÃ y báº¡n cÃ³ thá» thÃªm effect khÃ¡c:
+                    // else if (ct.effect === "sparkle") { ... }
+                }
+
+                captionPills.appendChild(btn);
+            });
+
+            // render media pills
+            captionPillsMedia.innerHTML = "";
+            captionTypes.filter(x => x.category === "custom").forEach(ct => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.dataset.id = ct.id;
+
+                const isSelected = ct.id === selectedCaptionId;
+                btn.className = [
+                    "inline-flex items-center gap-1.5 rounded-full px-4 py-2 ring-1 transition select-none cursor-pointer",
+                    isSelected ? "ring-2 ring-yellow-400" : "hover:opacity-100",
+                    ct.bg || "bg-white/5",
+                    ct.text || "text-white/85",
+                    ct.ring || "ring-white/10",
+                ].join(" ");
+
+                const icon = ct?.icon || null;
+                let iconHtml = "";
+                if (icon) {
+                    if (typeof icon === "string") {
+                        iconHtml = `<span class="text-lg leading-none">${icon}</span>`;
+                    } else if (icon && typeof icon === "object" && icon.type === "image" && icon.src) {
+                        const alt = String(icon.alt || "").replace(/"/g, "&quot;");
+                        const src = String(icon.src).replace(/"/g, "%22");
+                        iconHtml = `<img src="${src}" alt="${alt}" class="w-6 h-6 object-contain select-none pointer-events-none" loading="lazy" decoding="async" referrerpolicy="no-referrer" />`;
+                    }
+                }
+
+                btn.innerHTML = `
+                    ${icon ? `<span class="shrink-0">${iconHtml}</span>` : ''}
+                    <span class="font-semibold">${ct.label}</span>
+                `;
+
+                captionPillsMedia.appendChild(btn);
+            });
+
+            let placeholder_interval;
+
+            // Choose caption via event delegation (#captionPills as requested)
+            captionPills.addEventListener("click", async (e) => {
+                clearInterval(placeholder_interval);
+
+                const btn = e.target.closest("button[data-id]");
+                if (!btn) return;
+
+                captionPills.querySelectorAll("button").forEach(e => {
+                    if (e.getAttribute("data-id") === btn.getAttribute("data-id")) e.setAttribute("disabled", '');
+                    else e.removeAttribute("disabled");
+                });
+
+                const captionId = btn.dataset.id;
+                selectedCaptionId = captionId;
+
+                const ct = captionTypes.find(x => x.id === captionId);
+                captionSelectedBadge.textContent = "Caption: " + (ct?.label || "Máº·c Äá»nh");
+
+                // update active class in both areas
+                [captionPills, captionPillsMedia].forEach(wrap => {
+                    wrap.querySelectorAll("button[data-id]").forEach(b => {
+                        const id = b.dataset.id;
+                        const c = captionTypes.find(x => x.id === id);
+                        const isSel = id === selectedCaptionId;
+
+                        b.className = [
+                            "inline-flex items-center gap-1.5 rounded-full px-4 py-2 ring-1 transition select-none cursor-pointer",
+                            isSel ? "ring-2 ring-yellow-400" : "hover:opacity-100",
+                            c?.bg || "bg-white/5",
+                            c?.text || "text-white/85",
+                            c?.ring || "ring-white/10",
+                        ].join(" ");
+                    });
+                });
+
+                // reset UI blocks
+                captionExtra.classList.add("hidden");
+                captionExtraHint.textContent = "";
+                captionExtraHint.className = "mt-1 text-xs text-white/50";
+
+                captionExtraInput.classList.add("hidden");
+                captionExtraStars.classList.add("hidden");
+                captionExtraColors.classList.add("hidden");
+                customCaptionOptions.classList.add("hidden");
+                customCaptionPresetWrap.classList.add("hidden");
+                weatherCaptionPresetWrap.classList.add("hidden");
+                reunificationDayPills.classList.add("hidden");
+                captionExtraSelect.classList.add("hidden");
+
+                captionText.removeAttribute("disabled");
+                captionText.placeholder = "Nháº­p caption cá»§a báº¡n...";
+
+                // reset per-caption flags
+                musicResolvedOk = false;
+
+                // per caption handling (inline if by captionID)
+                if (captionId === "defaultCaption") {
+                    // keep text as-is
+                } else if (captionId === "customCaption") {
+                    captionExtra.classList.remove("hidden");
+                    customCaptionOptions.classList.remove("hidden");
+                    captionExtra.querySelector("label").textContent = ct?.extraLabel;
+
+                    customCaptionLayoutNewline.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${customCaptionLayoutMode === "newline" ? _btnOn : _btnOff}`;
+                    customCaptionLayoutScroll.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${customCaptionLayoutMode === "scroll" ? _btnOn : _btnOff}`;
+
+                    customCaptionColorDefault.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${customCaptionColorMode === "default" ? _btnOn : _btnOff}`;
+                    // customCaptionColorPreset.className  = `px-4 py-2 rounded-full text-sm font-semibold transition ${customCaptionColorMode === "preset" ? _btnOn : _btnOff}`;
+                    customCaptionColorCustom.className = `px-4 py-2 rounded-full text-sm font-semibold transition ${customCaptionColorMode === "custom" ? _btnOn : _btnOff}`;
+
+                    if (customCaptionColorMode === "preset") {
+                        customCaptionPresetWrap.classList.remove("hidden");
+                        // re-render pills so ring matches presetId
+                        // customCaptionColorPreset.click();
+                    } else if (customCaptionColorMode === "custom") {
+                        captionExtraColors.classList.remove("hidden");
+                    }
+                } else if (captionId === "timeCaption") {
+                    captionText.value = new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true });
+                } else if (captionId === "musicCaption") {
+                    captionText.value = "";
+                    captionText.placeholder = "TÃªn bÃ i hÃ¡t sáº½ tá»± Äiá»n vÃ o ÄÃ¢y sau khi cáº­u dÃ¡n liÃªn káº¿t bÃ i hÃ¡t Spotify/Apple Music há»£p lá» vÃ o Ã´ bÃªn dÆ°á»i";
+
+                    captionExtra.classList.remove("hidden");
+                    captionExtraInput.classList.remove("hidden");
+                    captionExtra.querySelector("label").textContent = ct?.extraLabel;
+                    captionExtraInput.value = '';
+                    captionExtraHint.textContent = ct?.extraHint || "";
+
+                    const example_placeholder = [
+                        "https://open.spotify.com/track/...",
+                        "https://open.spotify.com/episode/...",
+                        "https://music.apple.com/vn/album/.../1234567890?i=0123456789"
+                    ]
+
+                    let i = 0;
+                    captionExtraInput.placeholder = `VÃ­ dá»¥: ${example_placeholder[i]}`;
+
+                    placeholder_interval = setInterval(() => {
+                        if (captionExtraInput.value) return;
+
+                        i = (i + 1) % example_placeholder.length;
+                        captionExtraInput.placeholder = `VÃ­ dá»¥: ${example_placeholder[i]}`;
+                    }, 1500);
+                } else if (captionId === "reviewCaption") {
+                    captionExtra.classList.remove("hidden");
+                    captionExtraStars.classList.remove("hidden");
+                    captionExtra.querySelector("label").textContent = ct?.extraLabel || "ÄÃ¡nh giÃ¡";
+                    captionExtraHint.textContent = ct?.extraHint || "Chá»n sá» sao tá»« 0.5 Äáº¿n 5";
+                } else if (captionId === "locationCaption") {
+                    captionText.value = "";
+                    captionText.setAttribute("disabled", "");
+                    captionText.placeholder = "Chá»n Äá»a chá» trong danh sÃ¡ch bÃªn dÆ°á»i";
+
+                    captionExtra.classList.remove("hidden");
+                    captionExtraSelect.classList.remove("hidden");
+                    captionExtra.querySelector("label").textContent = "Chá»n Äá»a chá»";
+                    captionExtraHint.textContent = "Äang xin quyá»n truy cáº­p vÃ o vá» trÃ­...";
+                    captionExtraHint.className = "mt-1 text-xs text-white/60";
+
+                    captionExtraSelect.innerHTML = `<option value="">â Äang láº¥y danh sÃ¡ch Äá»a chá»... â</option>`;
+
+                    const loc = await getLocationData();
+
+                    // KhÃ´ng láº¥y ÄÆ°á»£c vá» trÃ­ -> nháº¯c user tá»± nháº­p captionText
+                    if (loc.status !== "success") {
+                        captionExtra.classList.add("hidden");           // áº©n select vÃ¬ khÃ´ng cÃ³ data
+                        captionText.value = "";
+                        captionText.placeholder = "KhÃ´ng láº¥y ÄÆ°á»£c vá» trÃ­ â hÃ£y Äá»i caption qua láº¡i. Äá» thá»­ láº¡i hoáº·c tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                        captionText.removeAttribute("disabled");
+                        captionText.focus();
+                        touchConfirm();
+                        recomputePostState();
+
+                        showToast("warning", "ThÃ´ng bÃ¡o", "KhÃ´ng láº¥y ÄÆ°á»£c vá» trÃ­ â hÃ£y nháº¥n chá»n caption Äá» thá»­ láº¡i hoáº·c tá»± nháº­p ná»i dung muá»n hiá»n thá».");
+                        return;
+                    }
+
+                    // Láº¥y ÄÆ°á»£c lat/lng -> gá»i API, response.data lÃ  array Äá»a chá»
+                    try {
+                        captionExtraHint.textContent = "Äang láº¥y danh sÃ¡ch Äá»a chá»â¦";
+                        captionExtraHint.className = "mt-1 text-xs text-white/60";
+
+                        let resp = await fetch(urlServer(), {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${localStorage.getItem("idToken")}`,
+                            },
+                            body: JSON.stringify({
+                                action: "getAddressFromGeolocation",
+                                latitude: loc.latitude,
+                                longitude: loc.longitude,
+                            }),
+                        });
+
+                        if (resp.status !== 200) {
+                            captionExtra.classList.add("hidden");
+                            captionText.value = "";
+                            captionText.placeholder = "KhÃ´ng láº¥y ÄÆ°á»£c danh sÃ¡ch Äá»a chá» â hÃ£y tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                            captionText.focus();
+                            touchConfirm();
+                            recomputePostState();
+                            captionText.removeAttribute("disabled");
+                            return;
+                        }
+
+                        const data = await resp.json();
+                        const list = Array.isArray(data?.data) ? data.data : [];
+
+                        if (!list.length) {
+                            coordinates = {
+                                latitude: loc.latitude,
+                                longitude: loc.longitude
+                            }
+
+                            if (data?.success) { // success tá»©c lÃ  cÃ³ data, nhÆ°ng data khÃ´ng pháº£i array thÃ¬ vÃ¬ nÃ³ chá» cÃ³ 1 káº¿t quáº£ duy nháº¥t trong data, dáº¡ng string
+                                captionExtra.classList.add("hidden");
+                                captionText.value = data?.data;
+                                captionText.placeholder = "HÃ£y tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                                captionText.removeAttribute("disabled");
+                                captionText.focus();
+
+                                showToast("success", "ThÃ nh cÃ´ng", `ÄÃ£ sá»­ dá»¥ng Äá»a chá» ${data?.data || "KhÃ´ng rÃµ"} vÃ o caption`);
+
+                                return
+                            }
+
+                            captionExtra.classList.add("hidden");
+                            captionText.value = "";
+                            captionText.placeholder = "HÃ£y tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                            captionText.focus();
+                        }
+                        console.log('no');
+
+                        // const list = Array.isArray(data?.data) ? data.data : (typeof data?.data === "string" ? [data.data] : []);
+                        // captionExtraSelect.innerHTML = [
+                        //     `<option value="">â Chá»n má»t Äá»a chá» â</option>`,
+                        //     ...list.map(a => `<option value="${String(a).replace(/"/g, "&quot;")}">${String(a)}</option>`)
+                        // ].join("");
+
+                        captionExtraSelect.innerHTML = [
+                            `<option value="">â Chá»n má»t Äá»a chá» â</option>`,
+                            ...list.map(a => {
+                                const s = String(a || "");
+                                const safe = s.replace(/"/g, "&quot;");
+                                return `<option value="${safe}">${s}</option>`;
+                            })
+                        ].join("");
+
+                        captionExtraHint.textContent = list.length
+                            ? "Chá»n má»t Äá»a chá» trong danh sÃ¡ch."
+                            : "KhÃ´ng cÃ³ gá»£i Ã½ â hÃ£y tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                        captionExtraHint.className = "mt-1 text-xs text-white/60";
+                    } catch (err) {
+                        captionExtra.classList.add("hidden");
+                        captionText.value = "";
+                        captionText.placeholder = "KhÃ´ng thá» láº¥y danh sÃ¡ch Äá»a chá» â hÃ£y tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                        captionText.focus();
+                    }
+
+                } else if (captionId === "weatherCaption") {
+                    captionText.value = "";
+                    captionText.placeholder = "Äang láº¥y thÃ´ng tin thá»i tiáº¿t...";
+
+                    const loc = await getLocationData();
+
+                    if (loc.status !== "success") {
+                        captionText.value = "";
+                        captionText.placeholder = "KhÃ´ng láº¥y ÄÆ°á»£c thÃ´ng tin thá»i tiáº¿t â hÃ£y Äá»i caption qua láº¡i Äá» thá»­ láº¡i hoáº·c tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                        captionText.removeAttribute("disabled");
+                        captionText.focus();
+                        touchConfirm();
+                        recomputePostState();
+
+                        showToast("warning", "ThÃ´ng bÃ¡o", "KhÃ´ng láº¥y ÄÆ°á»£c thÃ´ng tin thá»i tiáº¿t â hÃ£y Äá»i caption qua láº¡i Äá» thá»­ láº¡i hoáº·c tá»± nháº­p ná»i dung muá»n hiá»n thá».");
+                        return;
+                    }
+
+                    try {
+                        let resp = await fetch(urlServer(), {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${localStorage.getItem("idToken")}`,
+                            },
+                            body: JSON.stringify({
+                                action: "getWeatherFromGeolocation",
+                                latitude: loc.latitude,
+                                longitude: loc.longitude,
+                            }),
+                        });
+
+                        if (resp.status !== 200) {
+                            captionText.value = "";
+                            captionText.placeholder = "KhÃ´ng láº¥y ÄÆ°á»£c thÃ´ng tin thá»i tiáº¿t â hÃ£y Äá»i caption qua láº¡i Äá» thá»­ láº¡i hoáº·c tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                            captionText.removeAttribute("disabled");
+                            captionText.focus();
+                            touchConfirm();
+                            recomputePostState();
+
+                            showToast("warning", "ThÃ´ng bÃ¡o", "KhÃ´ng láº¥y ÄÆ°á»£c thÃ´ng tin thá»i tiáº¿t â hÃ£y Äá»i caption qua láº¡i Äá» thá»­ láº¡i hoáº·c tá»± nháº­p ná»i dung muá»n hiá»n thá».");
+                            return;
+                        }
+
+                        const data = await resp.json();
+
+                        // hiá»n ra toÃ n bá» preset pill thá»i tiáº¿t cho user chá»n
+                        captionExtra.classList.remove("hidden");
+                        captionExtra.querySelector("label").textContent = ct?.extraLabel || "Tuá»³ chá»n giao diá»n thá»i tiáº¿t";
+                        weatherCaptionPresetWrap.classList.remove("hidden");
+
+                        weatherCaptionPresetPills.innerHTML = "";
+                        weatherCaptionPresets.forEach(p => {
+                            const b = document.createElement("button");
+                            b.type = "button";
+
+                            const isSelected = p.id === weatherCaptionPresetId;
+                            b.className = [
+                                "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition",
+                                "ring-1 ring-white/10",
+                                isSelected ? "ring-2 ring-yellow-400" : "hover:ring-white/20"
+                            ].join(" ");
+
+                            b.style.background = `linear-gradient(to bottom, ${p.top}, ${p.bottom})`;
+                            b.style.color = p.text;
+
+                            // --- build content (icon + text) without relying on string concat ---
+                            // ICON
+                            if (p?.icon) {
+                                const iconWrap = document.createElement("span");
+                                iconWrap.className = "shrink-0 inline-flex items-center justify-center";
+
+                                const iconVal = String(p.icon).trim();
+
+                                // SVG / IMAGE URL
+                                // SVG (absolute OR relative path)
+                                if (/\.svg(\?.*)?$/i.test(iconVal)) {
+                                    fetch(iconVal)
+                                        .then(r => r.text())
+                                        .then(svgText => {
+                                            iconWrap.innerHTML = svgText;
+
+                                            const svg = iconWrap.querySelector("svg");
+                                            if (svg) {
+                                                // Äáº£m báº£o cÃ³ viewBox Äá» scale ÄÃºng vá» 20x20
+                                                if (!svg.getAttribute("viewBox")) {
+                                                    const vb =
+                                                        svg.getAttribute("data-viewBox") ||
+                                                        svg.getAttribute("viewbox"); // phÃ²ng file viáº¿t sai case
+
+                                                    // náº¿u svg khÃ´ng cÃ³ viewBox, cá» láº¥y tá»« rect lá»n nháº¥t (cá»§a CoreSVG hay cÃ³ rect ná»n)
+                                                    const r = svg.querySelector("rect[width][height]");
+                                                    if (r) {
+                                                        const w = parseFloat(r.getAttribute("width") || "0");
+                                                        const h = parseFloat(r.getAttribute("height") || "0");
+                                                        const x = parseFloat(r.getAttribute("x") || "0");
+                                                        const y = parseFloat(r.getAttribute("y") || "0");
+                                                        if (w > 0 && h > 0) svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+                                                    }
+                                                }
+
+                                                iconWrap.style.width = "20px";
+                                                iconWrap.style.height = "20px";
+                                                iconWrap.style.flex = "0 0 20px";
+                                                iconWrap.style.overflow = "hidden"; // visible
+
+                                                svg.setAttribute("width", "20");
+                                                svg.setAttribute("height", "20");
+                                                svg.style.display = "block";
+                                                svg.style.flexShrink = "0";
+
+                                                // svg.style.transformOrigin = "center";
+                                                // svg.style.transform = "scale(1.3)";
+
+                                                svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+                                                svg.style.verticalAlign = "middle";
+
+                                                // ===== AUTO-FIT: tight viewBox theo ná»i dung tháº­t Äá» icon Äá»ng Äá»u =====
+                                                requestAnimationFrame(() => {
+                                                    try {
+                                                        // getBBox tÃ­nh theo ná»i dung tháº­t (path/group...), bá» whitespace âáº£oâ
+                                                        const bb = svg.getBBox();
+                                                        const pad = 2; // padding chÃºt cho Äá»¡ sÃ¡t viá»n, chá»nh 0..4 tuá»³ máº¯t
+
+                                                        const x = bb.x - pad;
+                                                        const y = bb.y - pad;
+                                                        const w = bb.width + pad * 2;
+                                                        const h = bb.height + pad * 2;
+
+                                                        if (w > 0 && h > 0) {
+                                                            svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
+                                                            svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+                                                        }
+                                                    } catch (e) {
+                                                        // náº¿u SVG quÃ¡ âláº¡â khÃ´ng getBBox ÄÆ°á»£c thÃ¬ thÃ´i, fallback nhÆ° cÅ©
+                                                    }
+                                                });
+
+                                                // ----- FORCE SVG use currentColor (Äá» iconColor / pill color cÃ³ tÃ¡c dá»¥ng) -----
+                                                if (p.iconColor) iconWrap.style.color = p.iconColor;
+
+                                                // Ã©p táº¥t cáº£ fill/stroke "cá»©ng" vá» currentColor
+                                                svg.querySelectorAll("[fill]").forEach(el => {
+                                                    const v = (el.getAttribute("fill") || "").trim().toLowerCase();
+                                                    if (v && v !== "none" && v !== "currentcolor") el.setAttribute("fill", "currentColor");
+                                                });
+                                                svg.querySelectorAll("[stroke]").forEach(el => {
+                                                    const v = (el.getAttribute("stroke") || "").trim().toLowerCase();
+                                                    if (v && v !== "none" && v !== "currentcolor") el.setAttribute("stroke", "currentColor");
+                                                });
+
+                                                // fallback: náº¿u path khÃ´ng cÃ³ fill/stroke attribute thÃ¬ set tháº³ng lÃªn path
+                                                svg.querySelectorAll("path").forEach(el => {
+                                                    if (!el.hasAttribute("fill")) el.setAttribute("fill", "currentColor");
+                                                });
+
+                                                // ----- per-path colors (náº¿u cÃ³) -----
+                                                if (Array.isArray(p.pathColors) && p.pathColors.length) {
+                                                    const paths = svg.querySelectorAll("path");
+
+                                                    paths.forEach((el, i) => {
+                                                        const c = p.pathColors[i];
+                                                        if (!c) return;
+
+                                                        const cc = String(c).trim();
+                                                        const color = cc.startsWith("#") ? cc : ("#" + cc);
+
+                                                        // set mÃ u riÃªng cho path i
+                                                        el.setAttribute("fill", color);
+
+                                                        // náº¿u svg lÃ  outline cÃ³ stroke, cÃ³ thá» set cáº£ stroke
+                                                        // el.setAttribute("stroke", color);
+                                                    });
+                                                }
+                                            }
+                                        })
+                                        .catch(() => {
+                                            // optional: fallback icon
+                                        });
+
+                                    // IMAGE (png/jpg/webp/gif)
+                                } else if (/^https?:\/\//i.test(iconVal)) {
+                                    const img = document.createElement("img");
+                                    img.src = iconVal;
+                                    img.alt = "";
+                                    img.className = "w-5 h-5 object-contain";
+                                    img.loading = "lazy";
+                                    img.decoding = "async";
+                                    img.referrerPolicy = "no-referrer";
+                                    iconWrap.appendChild(img);
+
+                                    // HTML STRING (vd: <i class="fa-solid ..."></i>)
+                                } else if (iconVal.startsWith("<")) {
+                                    iconWrap.innerHTML = iconVal;
+
+                                    if (p.iconColor) {
+                                        iconWrap.style.color = p?.iconColor || "";
+                                    }
+
+                                    // EMOJI / TEXT
+                                } else {
+                                    iconWrap.textContent = iconVal;
+                                    iconWrap.classList.add("text-lg", "leading-none");
+
+                                    if (p.iconColor) {
+                                        iconWrap.style.color = p?.iconColor || "";
+                                    }
+                                }
+
+                                b.appendChild(iconWrap);
+                            }
+
+                            // TEXT
+                            const txt = document.createElement("span");
+                            txt.className = "min-w-0 truncate";
+                            txt.textContent = `${data?.data || p?.label || ""}`;
+                            b.appendChild(txt);
+
+                            b.addEventListener("click", () => {
+                                weatherCaptionPresetId = p.id;
+
+                                [...weatherCaptionPresetPills.querySelectorAll("button")].forEach(btn => {
+                                    btn.classList.remove("ring-2", "ring-yellow-400");
+                                    btn.classList.add("ring-1", "ring-white/10");
+                                });
+                                b.classList.remove("ring-1", "ring-white/10");
+                                b.classList.add("ring-2", "ring-yellow-400");
+
+                                touchConfirm();
+                                recomputePostState();
+                            });
+
+                            weatherCaptionPresetPills.appendChild(b);
+                        });
+
+                        // táº¡m
+                        captionText.value = `${data.data}Â°C`;
+                        showToast("success", "ThÃ nh cÃ´ng", `Láº¥y thÃ´ng tin nhiá»t Äá» thÃ nh cÃ´ng. Nhiá»t Äá» hiá»n táº¡i: ${data?.data || "KhÃ´ng rÃµ"}Â°C`);
+                    } catch (err) {
+                        captionExtra.classList.add("hidden");
+                        captionText.value = "";
+                        captionText.placeholder = "KhÃ´ng thá» láº¥y danh sÃ¡ch Äá»a chá» â hÃ£y tá»± nháº­p ná»i dung muá»n hiá»n thá».";
+                        captionText.focus();
+                    }
+
+                } else if (captionId === "reunificationDayCaption") {
+                    captionText.value = ct?.label || "ChÃ o má»«ng 30/4";
+
+                    captionExtra.classList.remove("hidden");
+                    reunificationDayPills.classList.remove("hidden");
+                    captionExtra.querySelector("label").textContent = ct?.extraLabel || "Chá»n chá»§ Äá»";
+
+                    // sync UI
+                    pillFlagVN.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#910000,#7B0909)] text-[#F6D669] ${reunificationTheme === "flag_vn" ? on : off}`;
+                    pillFlagMT.className = `px-4 py-2 rounded-2xl font-semibold transition bg-[linear-gradient(to_bottom,#DA251D,#2596BE)] text-[#F6D669] ${reunificationTheme === "flag_mtgpmn" ? on : off}`;
+                } else {
+                    // static captions
+                    captionText.value = ct?.label || "";
+                    if (ct?.needsExtra) {
+                        captionExtra.classList.remove("hidden");
+                        captionExtraInput.classList.remove("hidden");
+                        captionExtra.querySelector("label").textContent = ct?.extraLabel || "Dá»¯ liá»u bá» sung";
+                        captionExtraInput.placeholder = ct?.extraPlaceholder || "";
+                        captionExtraHint.textContent = ct?.extraHint || "";
+                    }
+                }
+
+                touchConfirm();
+                recomputePostState();
+            });
+
+            // also allow click on media pills (delegate separately, but keep logic identical)
+            captionPillsMedia.addEventListener("click", async (e) => {
+                const btn = e.target.closest("button[data-id]");
+                if (!btn) return;
+
+                // simulate "main" handler body by manually dispatching through the same code path:
+                // (we do not create a function; we simply trigger click on the same-id button if exists in main,
+                // otherwise we run minimal copy by forcing selectedCaptionId and re-run UI update)
+                const targetId = btn.dataset.id;
+
+                // try to find a matching button in main area and click it (keeps single logic path)
+                const mainBtn = captionPills.querySelector(`button[data-id="${CSS.escape(targetId)}"]`);
+                if (mainBtn) {
+                    mainBtn.click();
+                } else {
+                    // fallback: treat it as selection
+                    selectedCaptionId = targetId;
+                    const ct = captionTypes.find(x => x.id === targetId);
+                    captionSelectedBadge.textContent = "Caption: " + (ct?.label || "Máº·c Äá»nh");
+                    touchConfirm();
+                    recomputePostState();
+                }
+            });
+
+            postBtn.addEventListener("click", async (e) => {
+                if (postBtn.dataset.enabled !== "1") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showToast("warning", "Cáº£nh bÃ¡o", postBtn.dataset.disabledReason || "ChÆ°a Äá»§ Äiá»u kiá»n Äá» ÄÄng");
+                    return;
+                }
+
+                if (!selectedFile) {
+                    alert("Báº¡n chÆ°a chá»n áº£nh/video Äá» ÄÄng.");
+                    return;
+                }
+
+                const ct = captionTypes.find(x => x.id === selectedCaptionId);
+                let payload = null;
+
+                if (ct?.id === "customCaption") {
+                    payload = {
+                        layout: customCaptionLayoutMode,     // "newline" | "scroll"
+                        colorMode: customCaptionColorMode,   // "default" | "preset" | "custom"
+                        presetId: null,
+                        colors: null
+                    };
+
+                    if (customCaptionColorMode === "preset") payload.presetId = customCaptionPresetId;
+                    if (customCaptionColorMode === "custom") {
+                        payload.colors = {
+                            top: colorTop.value,
+                            bottom: colorBottom.value,
+                            text: colorText.value
+                        };
+                    }
+                }
+
+                if (ct?.id === "musicCaption") {
+                    payload = {
+                        value: captionExtraInput.value
+                    };
+                }
+
+                if (ct?.id === "linkCaption") {
+                    payload = {
+                        value: captionExtraInput.value
+                    };
+                }
+
+                if (ct?.id === "locationCaption") {
+                    payload = {
+                        coordinates
+                    };
+                }
+
+                if (ct?.id === "weatherCaption") {
+                    payload = {
+                        weatherId: weatherCaptionPresetId,
+                        weatherIcon: null
+                    };
+                }
+
+                if (ct?.id === "reviewCaption") {
+                    payload = {
+                        value: String(captionExtraStarsRange.value || "5")
+                    };
+                }
+
+                if (ct?.id === "reunificationDayCaption") {
+                    payload = {
+                        value: reunificationTheme
+                    };
+                }
+
+                // console.log("POST PAYLOAD (demo)", {
+                //     captionId: selectedCaptionId,
+                //     captionText: (captionText.value || "").trim(),
+                //     payload,
+                //     mediaCropPayload,
+                //     recipients: audienceMode == "some" ? selectedFriendIds : audienceMode,
+                //     mode: {
+                //         restoreToggle: restoreToggle.checked,
+                //         exceptGroupToggle: exceptGroupToggle?.checked || false
+                //     }
+                // });
+
+                showLoader("Chá» xÃ­u nhe...");
+                // setTimeout(() => { hideLoader() }, 700);
+
+                const formData = new FormData();
+                formData.append("action", "uploadMedia");
+                formData.append("captionID", selectedCaptionId);
+                formData.append("captionText", (captionText.value || "").trim());
+                formData.append("payload", payload == null ? payload : JSON.stringify(payload));
+                formData.append("mediaCropPayload", JSON.stringify(mediaCropPayload));
+                formData.append("recipients", audienceMode == "some" ? JSON.stringify([...selectedFriendIds]) : audienceMode);
+                formData.append("mode", JSON.stringify({ restoreToggle: restoreToggle.checked, exceptGroupToggle: exceptGroupToggle?.checked || false }));
+                formData.append("thumb", await dataURLToBlob(imgPreview.getAttribute("src")), "image.webp");
+                formData.append("media", selectedFile);
+
+                try {
+                    const res = await fetch(urlServer(), { method: "POST", headers, body: formData });
+                    if (res.status == 413) {
+                        showToast('warning', "Tháº¥t báº¡i", `Dung lÆ°á»£ng File quÃ¡ lá»n. HÃ£y thá»­ File khÃ¡c!`);
+                        return;
+                    } else if (res.status == 503) {
+                        showToast('warning', "Tháº¥t báº¡i", `MÃ¡y chá»§ Äang quÃ¡ táº£i táº¡m thá»i nÃªn khÃ´ng thá» giáº£m dung lÆ°á»£ng áº£nh/video cho cáº­u trÆ°á»c khi ÄÄng ÄÆ°á»£c. HÃ£y bÃ¡o cho nhÃ  phÃ¡t triá»n Äá» ÄÆ°á»£c kháº¯c phá»¥c, hoáº·c giáº£m cháº¥t lÆ°á»£ng áº£nh/video thá»§ cÃ´ng vÃ  thá»­ láº¡i nhe ð«¶`);
+                        return;
+                    }
+                    const response = await res.json();
+
+                    if (response?.success) {
+                        showToast('success', "ThÃ nh cÃ´ng", `ÄÄng ${selectedFile.type.startsWith("image") ? "áº£nh" : "video"} má»i lÃªn Locket thÃ nh cÃ´ng`);
+
+                        // Reset file input Äá» ngÆ°á»i dÃ¹ng cÃ³ thá» chá»n file má»i
+                        uploadInput.value = "";
+                        setFile(null);
+
+                        let result = await fetch(urlServer(), {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": `Bearer ${localStorage.getItem('idToken')}`,
+                            },
+                            body: JSON.stringify({ action: "getInfo" })
+                        });
+
+                        if (result.status == 401) window.location.replace('logout.html');
+                        result = await result.json();
+
+                        localStorage.setItem("displayName", result.data.displayName);
+                        localStorage.setItem("photoUrl", result.data.photoUrl);
+
+                        try {
+                            const displayName = document.getElementById('displayName');
+
+                            displayName.innerHTML = `ð¥ Chuá»i cá»§a báº¡n: ${result.streak.count}d`;;
+                        } catch (err) { }
+                    } else if (response?.error) {
+                        switch (response.error) {
+                            case "FILE_TOO_LARGE": {
+                                showToast("warning", "Cáº£nh bÃ¡o", "áº¢nh/video quÃ¡ náº·ng (trÃªn 50MB), chÆ°a ÄÆ°á»£c tÃ­nh toÃ¡n Äá» xá»­ lÃ½ File dung lÆ°á»£ng nÃ y!");
+                                break;
+                            }
+                            case "STREAK_COUNT_NOT_BE_RESTORED": {
+                                showToast("error", "Tháº¥t báº¡i", "KhÃ´ng thá» khÃ´i phá»¥c chuá»i!");
+                                break;
+                            }
+                            default: {
+                                alert(`ÄÃ£ phÃ¡t sinh lá»i chÆ°a biáº¿t trÆ°á»c. HÃ£y sao chÃ©p lá»i vÃ  gá»­i cho nhÃ  phÃ¡t triá»n Äá» ÄÆ°á»£c kháº¯c phá»¥c nhe. ThÃ´ng tin lá»i: ${JSON.stringify(response, null, 2)}`);
+                            }
+                        }
+                    } else {
+                        alert(`ÄÃ£ phÃ¡t sinh lá»i. HÃ£y sao chÃ©p lá»i vÃ  gá»­i cho nhÃ  phÃ¡t triá»n Äá» ÄÆ°á»£c kháº¯c phá»¥c nhe. ThÃ´ng tin lá»i: ${JSON.stringify(response, null, 2)}`);
+                    }
+                } catch (err) {
+                    console.error(err.stack);
+
+                    alert(`ÄÃ£ phÃ¡t sinh lá»i! HÃ£y sao chÃ©p lá»i vÃ  gá»­i cho nhÃ  phÃ¡t triá»n Äá» ÄÆ°á»£c kháº¯c phá»¥c nha. ThÃ´ng tin lá»i: ${err.stack}`);
+                } finally {
+                    hideLoader();
+                }
+
+
+            });
+
+            touchConfirm();
+            recomputePostState();
+        });
+    </script>
+
+    <script>
+        const groupEmpty = document.getElementById("groupEmpty");
+        const groupList = document.getElementById("groupList");
+
+        const friendSearch = document.getElementById("friendSearch");
+        const chkAllFriends = document.getElementById("chkAllFriends");
+        const chkOnlyMe = document.getElementById("chkOnlyMe");
+        const friendLoading = document.getElementById("friendLoading");
+        const friendListWrap = document.getElementById("friendListWrap");
+        const friendList = document.getElementById("friendList");
+        const friendEmpty = document.getElementById("friendEmpty");
+
+        const audienceBadge = document.getElementById("audienceBadge");
+
+        let audienceMode = "all";
+        let selectedGroupId = null;
+        const selectedFriendIds = new Set();
+
+        let groupsData = [];
+        let friendsData = [];
+
+        let friendRowEls = [];
+        let groupRowEls = [];
+        function isAudienceChosen() {
+            if (audienceMode === "all") return true;
+            if (audienceMode === "private") return true;
+            if (audienceMode === "group") return !!selectedGroupId;
+            if (audienceMode === "some") return selectedFriendIds.size > 0;
+            return false;
+        }
+
+        chkAllFriends.checked = true;
+        chkOnlyMe.checked = false;
+
+        chkAllFriends.addEventListener("change", () => {
+            if (chkAllFriends.checked) {
+                chkOnlyMe.checked = false;
+
+                selectedGroupId = null;
+
+                audienceMode = "all";
+            } else {
+                audienceMode = selectedFriendIds.size > 0 ? "some" : null;
+            }
+
+            const toggleChosen = chkAllFriends.checked || chkOnlyMe.checked;
+            const groupChosen = !!selectedGroupId;
+
+            friendListWrap.style.pointerEvents = (toggleChosen || groupChosen) ? "none" : "";
+            friendListWrap.style.opacity = (toggleChosen || groupChosen) ? "0.45" : "1";
+            friendSearch.disabled = (toggleChosen || groupChosen);
+            friendSearch.classList.toggle("opacity-60", (toggleChosen || groupChosen));
+            friendList.querySelectorAll("input.friendChk").forEach(chk => chk.disabled = (toggleChosen || groupChosen));
+
+            const q = (friendSearch.value || "").trim().toLowerCase();
+            let visible = 0;
+            friendRowEls.forEach(({ el, key }) => {
+                const ok = !q || key.includes(q);
+                el.classList.toggle("hidden", !ok);
+                if (ok) visible++;
+            });
+            friendEmpty.classList.toggle("hidden", visible !== 0);
+
+            touchConfirm();
+        });
+
+        chkOnlyMe.addEventListener("change", () => {
+            if (chkOnlyMe.checked) {
+                chkAllFriends.checked = false;
+
+                selectedGroupId = null;
+
+                audienceMode = "private";
+            } else {
+                audienceMode = selectedFriendIds.size > 0 ? "some" : null;
+            }
+
+            const toggleChosen = chkAllFriends.checked || chkOnlyMe.checked;
+            const groupChosen = !!selectedGroupId;
+
+            friendListWrap.style.pointerEvents = (toggleChosen || groupChosen) ? "none" : "";
+            friendListWrap.style.opacity = (toggleChosen || groupChosen) ? "0.45" : "1";
+            friendSearch.disabled = (toggleChosen || groupChosen);
+            friendSearch.classList.toggle("opacity-60", (toggleChosen || groupChosen));
+            friendList.querySelectorAll("input.friendChk").forEach(chk => chk.disabled = (toggleChosen || groupChosen));
+
+            const q = (friendSearch.value || "").trim().toLowerCase();
+            let visible = 0;
+            friendRowEls.forEach(({ el, key }) => {
+                const ok = !q || key.includes(q);
+                el.classList.toggle("hidden", !ok);
+                if (ok) visible++;
+            });
+            friendEmpty.classList.toggle("hidden", visible !== 0);
+
+            touchConfirm();
+        });
+
+        friendSearch.addEventListener("input", () => {
+            const q = (friendSearch.value || "").trim().toLowerCase();
+            let visible = 0;
+
+            friendRowEls.forEach(({ el, key }) => {
+                const ok = !q || key.includes(q);
+                el.classList.toggle("hidden", !ok);
+                if (ok) visible++;
+            });
+
+            friendEmpty.classList.toggle("hidden", visible !== 0);
+        });
+
+        // 4) EVENT DELEGATION: click group radio
+        // groupList.addEventListener("change", (e) => {
+        //     const r = e.target.closest('input[type="radio"][name="audienceGroup"]');
+        //     if (!r) return;
+
+        //     // chá»n group => bá» ALL/ME
+        //     chkAllFriends.checked = false;
+        //     chkOnlyMe.checked = false;
+
+        //     selectedGroupId = r.value;
+        //     audienceMode = "group";
+
+        //     // disable friend list vÃ¬ chá»n group
+        //     friendListWrap.style.pointerEvents = "none";
+        //     friendListWrap.style.opacity = "0.45";
+        //     friendSearch.disabled = true;
+        //     friendSearch.classList.add("opacity-60");
+        //     friendList.querySelectorAll("input.friendChk").forEach(chk => chk.disabled = true);
+
+        //     // group list váº«n enable (vÃ¬ Äang chá»n group, khÃ´ng pháº£i ALL/ME)
+        //     groupList.style.pointerEvents = "";
+        //     groupList.style.opacity = "1";
+
+        //     // khÃ´ng cáº§n filter á» ÄÃ¢y
+        //     touchConfirm();
+        // });
+
+        // 5) EVENT DELEGATION: click friend checkbox
+        friendList.addEventListener("change", (e) => {
+            const chk = e.target.closest("input.friendChk");
+            if (!chk) return;
+
+            const id = chk.value;
+
+            if (chk.checked) {
+                selectedFriendIds.add(String(id));
+
+                // chá»n báº¡n cá»¥ thá» => huá»· ALL/ME + huá»· GROUP
+                chkAllFriends.checked = false;
+                chkOnlyMe.checked = false;
+
+                selectedGroupId = null;
+                // groupList.querySelectorAll('input[type="radio"][name="audienceGroup"]').forEach(r => r.checked = false);
+
+                audienceMode = "some";
+            } else {
+                selectedFriendIds.delete(String(id));
+                if (selectedFriendIds.size === 0 && audienceMode === "some") audienceMode = null;
+            }
+
+            // vÃ¬ ÄÃ£ chá»n some => friend list pháº£i enable (trá»« khi user Äang ALL/ME/group)
+            const toggleChosen = chkAllFriends.checked || chkOnlyMe.checked;
+            const groupChosen = !!selectedGroupId;
+
+            // groupList.style.pointerEvents = toggleChosen ? "none" : "";
+            // groupList.style.opacity = toggleChosen ? "0.45" : "1";
+
+            friendListWrap.style.pointerEvents = (toggleChosen || groupChosen) ? "none" : "";
+            friendListWrap.style.opacity = (toggleChosen || groupChosen) ? "0.45" : "1";
+            friendSearch.disabled = (toggleChosen || groupChosen);
+            friendSearch.classList.toggle("opacity-60", (toggleChosen || groupChosen));
+            friendList.querySelectorAll("input.friendChk").forEach(x => x.disabled = (toggleChosen || groupChosen));
+
+            touchConfirm();
+        });
+
+        function renderAvatar(u) {
+            const url = u.profile_picture_url || u.photoURL || u.photoUrl || u.avatar || "";
+            const ini = esc(initials(u.username || u.first_name || u.name || "U"));
+
+            const hasGold = (u.badge === "locket_gold" || u.badge === "Locket Gold");
+            const isCeleb = !!u.celebrity;
+            const showBadge = hasGold || isCeleb;
+
+            const S = 50;               // size avatar
+            const R = S / 2;            // radius
+            const ring = 4;             // Äá» dÃ y viá»n vÃ ng
+            const gapBetween = 3;       // khoáº£ng há» giá»¯a viá»n vÃ  áº£nh (Äá» inset = ring + gapBetween)
+            const innerInset = ring + gapBetween; // 7px
+
+            const badge = 17;
+            const out = 0;              // -bottom-0.5 / -right-0.5
+            //   const notchR = badge/2 + 4; // khoáº£ng há» quanh badge trÃªn viá»n (tinh chá»nh: +3..+5)
+            // const notchR = badge/2 + 1;   // hoáº·c +2 náº¿u muá»n há» hÆ¡n chÃºt
+            const ringGap = innerInset - ring;
+            const notchR = Math.round((badge / 2 + ringGap) * 2) / 2; // lÃ m trÃ²n tá»i 0.5
+
+            const iconClass = hasGold
+                ? 'text-[11px] translate-y-[1px]'
+                : 'text-[15px] translate-y-[0px]';
+
+            const cx = S + out - badge / 2;
+            const cy = S + out - badge / 2;
+
+            const safeId = String(u.uid || u.username || Math.random()).replace(/[^a-zA-Z0-9_]/g, "_");
+            const maskId = `ringmask_${safeId}`;
+
+            const ringMask = `
+                <mask id="${maskId}" maskUnits="userSpaceOnUse">
+                    <rect width="${S}" height="${S}" fill="white"></rect>
+
+                    <!-- khoÃ©t lá» bÃªn trong Äá» thÃ nh "vÃ²ng" -->
+                    <circle cx="${R}" cy="${R}" r="${R - ring}" fill="black"></circle>
+
+                    <!-- khoÃ©t notch náº¿u cÃ³ badge -->
+                    ${showBadge ? `<circle cx="${cx}" cy="${cy}" r="${notchR}" fill="black"></circle>` : ""}
+                </mask>
+            `;
+
+            const svgRing = `
+                <svg class="absolute inset-0 pointer-events-none" width="${S}" height="${S}" viewBox="0 0 ${S} ${S}" shape-rendering="geometricPrecision">
+                    <defs>${ringMask}</defs>
+                    <circle cx="${R}" cy="${R}" r="${R}" fill="#ffd24a" mask="url(#${maskId})"></circle>
+                </svg>
+            `;
+
+            const overlay = showBadge ? `
+                <span class="absolute -bottom-0 -right-0 w-[${badge}px] h-[${badge}px] rounded-full bg-[#ffd24a] grid place-items-center">
+                    <span class="text-black leading-none ${iconClass}">${hasGold ? "â¤" : "â¦"}</span>
+                </span>
+            ` : "";
+
+            return `
+                <div class="relative w-[${S}px] h-[${S}px] shrink-0 overflow-visible">
+                    ${svgRing}
+
+                    <!-- INNER: cÃ³ khoáº£ng há» giá»¯a viá»n vÃ  áº£nh + khoÃ©t quanh badge -->
+                    <div class="absolute rounded-full overflow-hidden bg-white/10 grid place-items-center ${showBadge ? "fm-contentPunch" : ""}" style="inset:${innerInset}px; --inset:${innerInset}px; --badge:${badge}px; --gap:7px; --out:${out}px;">
+                    ${url
+                    ? `<img src="${esc(url)}" class="w-full h-full object-cover" alt="" loading="lazy">`
+                    : `<div class="w-full h-full grid place-items-center font-extrabold text-lg text-white/80">${ini}</div>`
+                }
+                    </div>
+
+                    ${overlay}
+                </div>
+            `;
+        }
+
+        // ===== LOAD DATA (async) =====
+        (async () => {
+            // --- GROUPS: luÃ´n fetch má»i láº§n load ---
+            try {
+                // TODO: báº¡n tá»± thay báº±ng API tháº­t
+                // const res = await fetch(urlServer(), {
+                //     "Content-Type": "application/json",
+                //     "Authorization": `Bearer ${localStorage.getItem('idToken')}`,
+                // }, JSON.stringify({ action: "getGroupList" }));
+                // const response = await res.json();
+                // groupsData = Array.isArray(response?.data) ? response.data : [];
+                groupsData = [];
+            } catch (err) {
+                groupsData = [];
+            }
+
+            // render group list (inline)
+            // groupList.innerHTML = "";
+            groupRowEls = [];
+
+            // if (!groupsData.length) {
+            //     groupEmpty.classList.remove("hidden");
+            // } else {
+            //     groupEmpty.classList.add("hidden");
+
+            //     groupsData.forEach(g => {
+            //         const gid = String(g.id);
+            //         const gname = g.name || g.groupName || g.title || "NhÃ³m";
+
+            //         const row = document.createElement("label");
+            //         row.className = "flex items-center gap-3 cursor-pointer select-none rounded-2xl bg-white/5 ring-1 ring-white/10 px-3 py-3";
+
+            //         row.innerHTML = `
+            //             <input type="radio" name="audienceGroup" class="w-4 h-4 accent-[#ffd24a]" value="${gid}">
+            //             <div class="min-w-0">
+            //                 <div class="text-sm font-medium truncate">${String(gname).replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+            //                 <div class="text-xs text-white/50">NhÃ³m báº¡n</div>
+            //             </div>
+            //         `;
+
+            //         const r = row.querySelector('input[type="radio"]');
+            //         if (selectedGroupId && String(selectedGroupId) === gid) r.checked = true;
+
+            //         groupList.appendChild(row);
+            //         groupRowEls.push({ id: gid, el: row });
+            //     });
+            // }
+
+            // Ã¡p dá»¥ng disable state hiá»n táº¡i (náº¿u user ÄÃ£ tick ALL/ME trÆ°á»c khi data vá»)
+            // const toggleChosen = chkAllFriends.checked || chkOnlyMe.checked;
+            // groupList.style.pointerEvents = toggleChosen ? "none" : "";
+            // groupList.style.opacity = toggleChosen ? "0.45" : "1";
+
+            // --- FRIENDS: chá» fetch náº¿u localStorage chÆ°a cÃ³ ---
+            try {
+                const cached = localStorage.getItem("listFriends");
+
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    friendsData = Array.isArray(parsed) ? parsed : [];
+                } else {
+                    // TODO: báº¡n tá»± thay báº±ng API tháº­t
+                    const res = await fetch_endpoint({
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${localStorage.getItem('idToken')}`,
+                    }, JSON.stringify({ action: "getFriendsList" }));
+                    const response = await res.json();
+                    friendsData = Array.isArray(response?.data) ? response.data : [];
+                    localStorage.setItem("listFriends", JSON.stringify(friendsData));
+                }
+            } catch (err) {
+                console.error(err);
+                friendsData = [];
+            }
+
+            // render friends
+            friendList.innerHTML = "";
+            friendRowEls = [];
+
+            friendsData.forEach(f => {
+                const fid = String(f.uid);
+                const displayName = `${f?.first_name} ${f?.last_name}`;
+                const uname = f.username ? `@${f.username}` : "";
+
+                const row = document.createElement("label");
+                row.className = "flex items-center gap-3 cursor-pointer select-none rounded-2xl bg-white/5 ring-1 ring-white/10 px-3 py-3";
+                row.dataset.name = (displayName + " " + uname).toLowerCase();
+
+                row.innerHTML = `
+                    <input class="friendChk w-4 h-4 accent-[#ffd24a]" type="checkbox" value="${fid}">
+                    ${renderAvatar(f)}
+                    <div class="min-w-0">
+                        <div class="text-sm font-medium truncate">${String(displayName).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                        <div class="text-xs text-white/50">${uname ? uname.replace(/</g, "&lt;").replace(/>/g, "&gt;") : "Báº¡n bÃ¨"}</div>
+                    </div>
+                `;
+
+                const chk = row.querySelector("input.friendChk");
+                chk.checked = selectedFriendIds.has(fid);
+
+                friendList.appendChild(row);
+                friendRowEls.push({ id: fid, el: row, key: row.dataset.name || "" });
+            });
+
+            // show/hide loading
+            friendLoading.classList.add("hidden");
+            friendListWrap.classList.remove("hidden");
+
+            // apply current disable state (vÃ¬ user cÃ³ thá» ÄÃ£ chá»n ALL/ME/GROUP trÆ°á»c khi friends vá»)
+            {
+                const toggleChosen = chkAllFriends.checked || chkOnlyMe.checked;
+                const groupChosen = !!selectedGroupId;
+                const disabled = (toggleChosen || groupChosen);
+
+                friendListWrap.style.pointerEvents = disabled ? "none" : "";
+                friendListWrap.style.opacity = disabled ? "0.45" : "1";
+                friendSearch.disabled = disabled;
+                friendSearch.classList.toggle("opacity-60", disabled);
+                friendList.querySelectorAll("input.friendChk").forEach(chk => chk.disabled = disabled);
+            }
+
+            // apply filter ngay sau khi render (náº¿u user ÄÃ£ gÃµ search tá»« trÆ°á»c)
+            {
+                const q = (friendSearch.value || "").trim().toLowerCase();
+                let visible = 0;
+                friendRowEls.forEach(({ el, key }) => {
+                    const ok = !q || key.includes(q);
+                    el.classList.toggle("hidden", !ok);
+                    if (ok) visible++;
+                });
+                friendEmpty.classList.toggle("hidden", visible !== 0);
+            }
+
+            // update confirm/post state 1 láº§n sau khi data vÃ o
+            touchConfirm();
+        })();
+    </script>
+
+
+    <script>
+        const restoreToggle = document.getElementById("restoreToggle");
+        const exceptGroupToggle = document.getElementById("exceptGroupToggle");
+        const confirmText = document.getElementById("confirmText");
+        const postBtn = document.getElementById("postBtn");
+
+        // UI helper: set disabled style cho post button
+        function setPostBtnEnabled(enabled) {
+            postBtn.dataset.enabled = enabled ? "1" : "0";
+
+            // chá» style
+            postBtn.classList.toggle("opacity-50", !enabled);
+            postBtn.classList.toggle("cursor-not-allowed", !enabled);
+
+            // QUAN TRá»NG: bá» 2 cÃ¡i nÃ y náº¿u báº¡n Äang dÃ¹ng
+            postBtn.removeAttribute("disabled");
+            postBtn.classList.remove("pointer-events-none");
+
+            // accessibility (tuá»³ chá»n)
+            postBtn.setAttribute("aria-disabled", enabled ? "false" : "true");
+        }
+
+        // tá»ng há»£p Äiá»u kiá»n enable
+        async function recomputePostState() {
+            let reason = "";
+
+            if (!selectedFile) {
+                reason = "ChÆ°a chá»n áº£nh hoáº·c video";
+            } else if (!isAudienceChosen()) {
+                reason = "ChÆ°a chá»n Äá»i tÆ°á»£ng xem";
+            } else {
+                // Inline caption validation (no caption helper functions)
+                const ct = captionTypes.find(x => x.id === selectedCaptionId);
+
+                if (ct?.needsExtra) {
+                    if (selectedCaptionId === "reviewCaption") {
+                        const v = Number(captionExtraStarsRange?.value || 0);
+                        if (!(v >= 0.5 && v <= 5)) reason = "Chá»n sá» sao tá»« 0.5 Äáº¿n 5.";
+                    } else if (selectedCaptionId === "reunificationDayCaption") {
+                        const ok = reunificationTheme === "flag_vn" || reunificationTheme === "flag_mtgpmn";
+                        if (!ok) reason = "Chá»n chá»§ Äá».";
+                    } else if (selectedCaptionId === "customCaption") {
+                        if (!["newline", "scroll"].includes(customCaptionLayoutMode)) {
+                            reason = "Chá»n kiá»u hiá»n thá» caption.";
+                        } else if (customCaptionColorMode === "preset") {
+                            if (!customCaptionPresetId) reason = "Chá»n mÃ u ná»n máº«u.";
+                        } else if (customCaptionColorMode === "custom") {
+                            const re = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+                            const ok = re.test(colorTop?.value || "") && re.test(colorBottom?.value || "") && re.test(colorText?.value || "");
+                            if (!ok) reason = "MÃ u tuá»³ chá»nh khÃ´ng há»£p lá».";
+                        } else if (customCaptionColorMode !== "default") {
+                            reason = "Chá»n cháº¿ Äá» mÃ u caption.";
+                        }
+                    } else if (selectedCaptionId === "musicCaption") {
+                        const url = (captionExtraInput?.value || "").trim();
+                        const regex = /^https:\/\/open\.spotify\.com\/(track|episode)\/[a-zA-Z0-9]{22}(?:\?.*)?$|^https:\/\/music\.apple\.com\/[a-z]{2}\/(album|song|playlist)\/[^\/]+\/\d+(?:\?i=\d+)?(?:&.*)?$/;
+                        if (!regex.test(url)) reason = "LiÃªn káº¿t khÃ´ng há»£p lá».";
+                        else if (!musicResolvedOk) reason = "ChÆ°a láº¥y xong thÃ´ng tin bÃ i hÃ¡t (hÃ£y rá»i khá»i Ã´ nháº­p Äá» há» thá»ng truy xuáº¥t).";
+                    } else if (selectedCaptionId === "locationCaption") {
+                        if (captionExtraSelect && !captionExtraSelect.classList.contains("hidden") && !captionExtra.classList.contains("hidden")) {
+                            const chosen = (captionExtraSelect.value || "").trim();
+                            if (!chosen) reason = "Chá»n má»t Äá»a chá».";
+                        } else {
+                            const v = (captionText.value || "").trim();
+                            if (!v) reason = "Thiáº¿u Äá»a chá» (hÃ£y nháº­p thá»§ cÃ´ng).";
+                        }
+                    } else {
+                        const v = (captionExtraInput?.value || "").trim();
+                        if (!v) reason = "Thiáº¿u dá»¯ liá»u bá» sung.";
+                    }
+                }
+            }
+
+            const enabled = reason === "";
+            setPostBtnEnabled(enabled);
+
+            postBtn.dataset.disabledReason = reason;
+        }
+
+        async function updateConfirm() {
+            const media = await (async () => {
+                if (!selectedFile) return "ChÆ°a chá»n";
+                if (selectedFile.type && selectedFile.type.startsWith("video/")) return "Video";
+                if (selectedFile.type && selectedFile.type.startsWith("image/")) return "áº¢nh";
+                return "Tá»p";
+            })();
+            const cap = await (async () => {
+                const ct = captionTypes.find(x => x.id === selectedCaptionId);
+                return ct ? ct.label : "Máº·c Äá»nh";
+            })();
+            const aud = await (async () => {
+                if (audienceMode === "group" && selectedGroupId) {
+                    const g = groupsData.find(x => String(x.id) === String(selectedGroupId));
+                    const name = g ? (g.name || g.groupName || g.title || "NhÃ³m") : "NhÃ³m";
+                    return `NhÃ³m: ${name}`;
+                }
+                if (audienceMode === "private") return "Chá» mÃ¬nh tÃ´i";
+                if (audienceMode === "all") return "ToÃ n bá» báº¡n bÃ¨";
+
+                if (audienceMode === "some" && selectedFriendIds.size > 0) {
+                    const picked = friendsData
+                        .filter(f => selectedFriendIds.has(String(f.uid)))
+                        .map(f => `${f?.first_name} ${f?.last_name}`);
+
+                    if (picked.length <= 2) return picked.join(", ");
+                    return `${picked.slice(0, 2).join(", ")} vÃ  ${picked.length - 2} ngÆ°á»i khÃ¡c`;
+                }
+                return "ChÆ°a chá»n Äá»i tÆ°á»£ng";
+            })();
+            const mode = await (async () => {
+                const s = [
+                    restoreToggle.checked && "KhÃ´i phá»¥c chuá»i",
+                    // exceptGroupToggle.checked && "Loáº¡i trá»« nhÃ³m báº¡n",
+                ].filter(Boolean).join(", ");
+
+                return s || "KhÃ´ng cÃ³";
+            })();
+
+            confirmText.textContent = `Loáº¡i phÆ°Æ¡ng tiá»n: ${media}\nCaption: ${cap}\nÄá»i tÆ°á»£ng ÄÆ°á»£c xem: ${aud}\nCháº¿ Äá» Äi kÃ¨m: ${mode}`;
+        }
+
+        restoreToggle.addEventListener("change", touchConfirm);
+        // exceptGroupToggle.addEventListener("change", touchConfirm);
+
+        updateConfirm();
+        setPostBtnEnabled(false);
+        recomputePostState();
+    </script>
+</body>
+
+</html>
