@@ -386,13 +386,87 @@ app.post('/api/friends', async (req, res) => {
   }
 });
 
-// ── Proxy Friend Requests (Mocked since Locket disabled it) ──
+// ── Proxy Friend Requests (Real Firestore version) ──────────
 app.post('/api/friends/requests', async (req, res) => {
-  res.json({ invitations: [] });
+  try {
+    const { userId, idToken, appCheck, instanceId } = req.body;
+    if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${idToken}`,
+      'User-Agent': USER_AGENT,
+      'X-Firebase-GMPID': FIREBASE_GMPID,
+      'X-Firebase-AppCheck': appCheck || FIREBASE_APP_CHECK,
+      'X-Firebase-Client': FIREBASE_CLIENT,
+      'Firebase-Instance-ID-Token': instanceId || INSTANCE_ID_TOKEN,
+    };
+
+    // Lấy danh sách invitations từ Firestore
+    const invUrl = `https://firestore.googleapis.com/v1/projects/locket-4252a/databases/(default)/documents/users/${userId}/invitations`;
+    const response = await axios.get(invUrl, { headers });
+
+    const docs = response.data.documents || [];
+    const invitations = await Promise.all(docs.map(async (doc) => {
+      const parts = doc.name.split('/');
+      const contactId = parts[parts.length - 1]; // UID of the requester
+      
+      try {
+        const userUrl = `https://firestore.googleapis.com/v1/projects/locket-4252a/databases/(default)/documents/users/${contactId}`;
+        const uRes = await axios.get(userUrl, { headers });
+        const fields = uRes.data.fields || {};
+        
+        return {
+          contact_id: contactId,
+          display_name: fields.first_name?.stringValue || 'Người dùng Locket',
+          username: fields.username?.stringValue || '',
+          thumbnail_url: fields.profile_picture_url?.stringValue || null,
+        };
+      } catch (e) {
+        return { contact_id: contactId, display_name: 'Unknown', username: '', thumbnail_url: null };
+      }
+    }));
+
+    logToFile(`Fetched ${invitations.length} friend requests`);
+    res.json({ invitations });
+  } catch (error) {
+    if (error.response?.status === 404) {
+        return res.json({ invitations: [] });
+    }
+    const errorData = error.response?.data || error.message;
+    logToFile(`Friend Requests error: ${JSON.stringify(errorData)}`);
+    res.status(error.response?.status || 500).json(errorData);
+  }
 });
 
 app.post('/api/friends/respond', async (req, res) => {
-  res.json({ success: true, message: "Mocked response, API deprecated" });
+  try {
+    const { idToken, contactId, action, appCheck, instanceId } = req.body;
+    // Locket usually handles this via a dedicated API endpoint
+    // Action can be 'accept' or 'ignore'
+    
+    const payload = {
+        contact_id: contactId,
+        action: action === 'accept' ? 'ACCEPT' : 'IGNORE'
+    };
+
+    const response = await axios.post('https://api.locketcamera.com/respondToInvitation', payload, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${idToken}`,
+        'User-Agent': USER_AGENT,
+        'X-Firebase-AppCheck': appCheck || FIREBASE_APP_CHECK,
+        'Firebase-Instance-ID-Token': instanceId || INSTANCE_ID_TOKEN,
+      }
+    });
+
+    logToFile(`Respond to invitation (${action}): ${JSON.stringify(response.data)}`);
+    res.json(response.data);
+  } catch (error) {
+    const errorData = error.response?.data || error.message;
+    logToFile(`Respond error: ${JSON.stringify(errorData)}`);
+    res.status(error.response?.status || 500).json(errorData);
+  }
 });
 
 app.use(express.static(path.join(__dirname)));

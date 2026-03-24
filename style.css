@@ -680,13 +680,60 @@ body {
 .btn-settings svg { width: 18px; height: 18px; }
 
 /* Security Modal / Token Input */
+.security-modal {
+  width: 500px !important;
+  background: linear-gradient(135deg, #111, #08080a) !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+.security-modal .modal-header h2 { color: #ef4444; }
+.security-modal .modal-logo {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
 .token-textarea {
-  min-height: 80px;
-  font-family: 'Cascadia Code', 'Consolas', monospace;
-  font-size: 12px !important;
-  line-height: 1.4 !important;
-  padding: 10px 12px !important;
-  background: rgba(0,0,0,.2) !important;
+  min-height: 100px;
+  font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+  padding: 14px !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  word-break: break-all;
+}
+.token-textarea:focus {
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  box-shadow: 0 0 15px rgba(239, 68, 68, 0.1) !important;
+}
+
+.modal-instruction {
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
+  text-align: left;
+}
+.modal-instruction-icon { font-size: 18px; line-height: 1; }
+.modal-instruction-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.modal-instruction-text b { color: var(--blue); }
+
+.btn-save-security {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.3) !important;
+}
+.btn-save-security:hover {
+  background: #f87171 !important;
+  transform: translateY(-2px);
 }
 
 /* Caption Tabs */

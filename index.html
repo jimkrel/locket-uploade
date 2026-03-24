@@ -289,37 +289,40 @@
 
   <!-- ── SECURITY MODAL ────────────────────────────────────── -->
   <div class="modal-overlay" id="securityModalOverlay">
-    <div class="modal security-modal" style="width: 480px;">
+    <div class="modal security-modal">
       <button class="modal-close" id="securityModalClose">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
       <div class="modal-header">
-        <div class="modal-logo" style="background: rgba(239,68,68,.1); border-color: rgba(239,68,68,.25);">
+        <div class="modal-logo">
           <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <h2>Cài đặt Bảo mật</h2>
         <p>Cập nhật token để sửa lỗi ảnh không hiện trên App</p>
       </div>
+
+      <div class="modal-instruction">
+        <div class="modal-instruction-icon">💡</div>
+        <div class="modal-instruction-text">
+          Sử dụng <b>Mitmproxy</b> để bắt gói tin <code>postMomentV2</code> từ điện thoại, tìm header <code>X-Firebase-AppCheck</code> và <code>Firebase-Instance-ID-Token</code>.
+        </div>
+      </div>
       
       <div class="form-group">
         <label>Firebase AppCheck Token</label>
         <div class="input-wrap">
-          <textarea id="appCheckInput" class="input-field token-textarea" placeholder="Dán AppCheck token ở đây..." rows="3"></textarea>
+          <textarea id="appCheckInput" class="input-field token-textarea" placeholder="Dán AppCheck token ở đây..."></textarea>
         </div>
       </div>
 
       <div class="form-group">
         <label>Instance-ID Token (FCM)</label>
         <div class="input-wrap">
-          <textarea id="instanceIdInput" class="input-field token-textarea" placeholder="Dán Instance-ID token ở đây..." rows="2"></textarea>
+          <textarea id="instanceIdInput" class="input-field token-textarea" placeholder="Dán Instance-ID token ở đây..."></textarea>
         </div>
       </div>
 
-      <div class="modal-note" style="text-align: left; margin-bottom: 20px;">
-        💡 <b>Mẹo:</b> Sử dụng Mitmproxy để bắt gói tin <code>postMomentV2</code> từ điện thoại, tìm các header <code>X-Firebase-AppCheck</code> và <code>Firebase-Instance-ID-Token</code>.
-      </div>
-
-      <button class="btn-primary btn-modal-login" id="btnSaveSecurity" style="background: var(--success); color: #fff; box-shadow: 0 4px 20px rgba(34,197,94,.3);">Lưu Cài đặt</button>
+      <button class="btn-primary btn-modal-login btn-save-security" id="btnSaveSecurity">Lưu Cài đặt</button>
     </div>
   </div>
 

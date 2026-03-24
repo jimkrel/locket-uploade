@@ -153,6 +153,7 @@ if (btnSaveSecurity) btnSaveSecurity.addEventListener('click', () => {
 // Navigation logic moved below Audience Selection
 
 // ── Presets Data ─────────────────────────────────────────────
+// ── Presets Data ─────────────────────────────────────────────
 const CAPTION_PRESETS = [
   { id: "default", label: "Mặc định", icon: "Aa", text: "", color: "default" },
   { id: "music", label: "Đang phát", icon: "🎵", text: "🎵 Now playing...", color: "green" },
@@ -188,6 +189,10 @@ const CAPTION_PRESETS = [
   { id: "party", label: "Party Time!", icon: "🥳", text: "🥳 Party Time!", color: "green-cyan" },
   { id: "ootd", label: "OOTD", icon: "🕶️", text: "🕶️ OOTD", color: "gray-dark" },
   { id: "missyou", label: "Miss you", icon: "🥰", text: "🥰 Miss you", color: "red-vibrant" },
+  { id: "vibes", label: "Vibes", icon: "🌊", text: "🌊 Good vibes only", color: "blue-vibrant" },
+  { id: "foodie", label: "Foodie", icon: "🍜", text: "🍜 Yum yum!", color: "orange" },
+  { id: "workout", label: "Workout", icon: "💪", text: "💪 No pain, no gain", color: "gray-dark" },
+  { id: "gaming", label: "Gaming", icon: "🎮", text: "🎮 Level up!", color: "purple-blue" },
 ];
 
 function initPresets() {
@@ -438,7 +443,7 @@ async function fetchFriends() {
   friendsList.innerHTML = '<div class="friends-loading">Đang tải danh sách...</div>';
   
   const doFetch = async (token) => {
-    return fetch('http://localhost:8767/api/friends', {
+    return fetch('/api/friends', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -633,7 +638,7 @@ async function doPost() {
 // Auto-refresh idToken khi expire (Firebase token hết hạn sau 1 giờ)
 async function refreshIdToken() {
   if (!session?.refreshToken) throw new Error('No refresh token - please login again');
-  const res = await fetch('http://localhost:8767/api/refresh', {
+  const res = await fetch('/api/refresh', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ 
@@ -665,7 +670,7 @@ async function uploadToProxy(blob, type, isOriginal = false) {
     formData.append('bucket', 'locket-4252a.appspot.com');
     formData.append('appCheck', securityTokens.appCheck);
     formData.append('instanceId', securityTokens.instanceId);
-    return fetch('http://localhost:8767/api/upload', { method: 'POST', body: formData });
+    return fetch('/api/upload', { method: 'POST', body: formData });
   };
 
   let res = await doUpload(session.idToken);
@@ -718,7 +723,7 @@ async function fetchFriendRequests() {
   requestsList.innerHTML = '<div class="friends-loading">Đang kiểm tra...</div>';
   
   try {
-    const res = await fetch('http://localhost:8767/api/friends/requests', {
+    const res = await fetch('/api/friends/requests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -764,7 +769,7 @@ function renderFriendRequests() {
 
 window.respondRequest = async (contactId, action) => {
   try {
-    const res = await fetch('http://localhost:8767/api/friends/respond', {
+    const res = await fetch('/api/friends/respond', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
