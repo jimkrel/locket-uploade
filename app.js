@@ -1,9 +1,12 @@
 /* ─────────────────────────────────────────────────────────────
    LOCKET UPLOADER – app.js (Proxy Version)
    Calls local Express proxy to bypass CORS
+   ⚠️  FIREBASE_API_KEY được lấy từ server qua /api/config
+       Không còn hardcode trong source code!
 ───────────────────────────────────────────────────────────── */
 
-const FIREBASE_API_KEY = 'AIzaSyCQngaaXQIfJaH0aS2l7REgIjD7nL431So';
+// FIREBASE_API_KEY sẽ được load async từ server (xem initApp())
+let FIREBASE_API_KEY = null;
 
 // ── DOM refs ──────────────────────────────────────────────────
 const loginScreen    = document.getElementById('loginScreen');
@@ -71,29 +74,29 @@ let activeTab = 'text'; // 'text', 'music', 'location'
 let activeScreen = 'upload'; // 'upload', 'friends'
 let fileMd5 = null;
 
-// ── Session persistence ───────────────────────────────────────
-function saveSession(data) {
+// ── Session persistence (Encrypted via CryptoStorage) ────────
+async function saveSession(data) {
   session = data;
-  localStorage.setItem('locket_session', JSON.stringify(data));
+  await CryptoStorage.set('locket_session', data);
 }
-function loadSession() {
+async function loadSession() {
   try {
-    const raw = localStorage.getItem('locket_session');
-    if (raw) {
-      session = JSON.parse(raw);
+    const data = await CryptoStorage.get('locket_session');
+    if (data) {
+      session = data;
       if (session.userId && !session.localId) session.localId = session.userId;
     }
-    const sec = localStorage.getItem('locket_security');
+    const sec = await CryptoStorage.get('locket_security');
     if (sec) {
-      securityTokens = JSON.parse(sec);
+      securityTokens = sec;
       if (appCheckInput) appCheckInput.value = securityTokens.appCheck || '';
       if (instanceIdInput) instanceIdInput.value = securityTokens.instanceId || '';
     }
   } catch (_) { session = null; }
 }
-function clearSession() {
+async function clearSession() {
   session = null;
-  localStorage.removeItem('locket_session');
+  CryptoStorage.remove('locket_session');
 }
 
 // ── Toast helper ──────────────────────────────────────────────
@@ -142,10 +145,10 @@ if (btnSettingsSidebar) btnSettingsSidebar.addEventListener('click', openSecurit
 if (securityModalClose) securityModalClose.addEventListener('click', closeSecurityModal);
 if (securityModalOverlay) securityModalOverlay.addEventListener('click', e => { if (e.target === securityModalOverlay) closeSecurityModal(); });
 
-if (btnSaveSecurity) btnSaveSecurity.addEventListener('click', () => {
+if (btnSaveSecurity) btnSaveSecurity.addEventListener('click', async () => {
   securityTokens.appCheck = appCheckInput ? appCheckInput.value.trim() : '';
   securityTokens.instanceId = instanceIdInput ? instanceIdInput.value.trim() : '';
-  localStorage.setItem('locket_security', JSON.stringify(securityTokens));
+  await CryptoStorage.set('locket_security', securityTokens);
   showToast('Đã lưu cài đặt bảo mật!');
   closeSecurityModal();
 });
@@ -333,10 +336,10 @@ async function doLogin() {
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        email, 
-        password, 
-        apiKey: FIREBASE_API_KEY,
+      body: JSON.stringify({
+        email,
+        password,
+        // apiKey không còn hardcode ở frontend – server tự dùng từ env
         appCheck: securityTokens.appCheck,
         instanceId: securityTokens.instanceId
       }),
@@ -348,7 +351,7 @@ async function doLogin() {
     }
 
     const data = await res.json();
-    saveSession({
+    await saveSession({
       idToken: data.idToken,
       refreshToken: data.refreshToken,
       localId: data.localId,
@@ -359,7 +362,7 @@ async function doLogin() {
 
     closeModal();
     showUploadScreen();
-    fetchFriendRequests(); // Also fetch requests
+    fetchFriendRequests();
     showToast(`Chào mừng ${session.displayName || email}! 👋`);
   } catch (err) {
     showLoginError(err.message || 'Đăng nhập thất bại.');
@@ -379,8 +382,8 @@ function showLoginError(msg) {
 }
 
 // ── LOGOUT ────────────────────────────────────────────────────
-btnLogout.addEventListener('click', () => {
-  clearSession();
+btnLogout.addEventListener('click', async () => {
+  await clearSession();
   showLoginScreen();
   showToast('Đã đăng xuất.');
 });
@@ -641,17 +644,17 @@ async function refreshIdToken() {
   const res = await fetch('/api/refresh', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ 
+    body: JSON.stringify({
       refreshToken: session.refreshToken,
-      apiKey: FIREBASE_API_KEY
+      // apiKey không cần gửi – server tự lấy từ env
     }),
   });
   if (!res.ok) throw new Error('Token refresh failed - please login again');
   const data = await res.json();
-  // Cập nhật session với token mới
+  // Cập nhật session với token mới (encrypted)
   session.idToken = data.id_token;
   session.refreshToken = data.refresh_token;
-  localStorage.setItem('locket_session', JSON.stringify(session));
+  await CryptoStorage.set('locket_session', session);
   console.log('🔄 Token refreshed successfully');
   return data.id_token;
 }
@@ -790,11 +793,27 @@ window.respondRequest = async (contactId, action) => {
   }
 };
 
-loadSession();
-initPresets();
-if (session?.idToken) {
-  showUploadScreen();
-  fetchFriendRequests();
-} else {
-  showLoginScreen();
+
+// ── App Initialisation (async) ────────────────────────────────
+async function initApp() {
+  // 1. Init CryptoStorage (migrate dữ liệu plaintext cũ nếu có)
+  await CryptoStorage.init();
+
+  // 2. Load session đã được mã hoá
+  await loadSession();
+
+  // 3. Init UI
+  initPresets();
+
+  if (session?.idToken) {
+    showUploadScreen();
+    fetchFriendRequests();
+  } else {
+    showLoginScreen();
+  }
 }
+
+initApp().catch(err => {
+  console.error('❌ App init failed:', err);
+});
+

@@ -6,3 +6,12 @@ server_logs.txt
 .vercel
 dist/
 build/
+
+# Environment secrets – KHÔNG bao giờ commit!
+.env
+*.env
+!.env.example
+
+# Server logs
+server_logs.txt
+logs/
