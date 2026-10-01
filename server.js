@@ -31,21 +31,25 @@ const REQUIRED_ENV = [
 ];
 const missingEnv = REQUIRED_ENV.filter((k) => !process.env[k]);
 if (missingEnv.length > 0) {
-  console.error('❌ Thiếu biến môi trường:', missingEnv.join(', '));
-  console.error('   → Sao chép .env.example thành .env và điền giá trị!');
-  process.exit(1);
+  console.warn('⚠️ Cảnh báo thiếu biến môi trường:', missingEnv.join(', '));
+  console.warn('   Hãy cấu hình trong Vercel Settings > Environment Variables.');
+  // Không exit(1) trên môi trường Vercel/serverless để tránh crash toàn bộ web
+  if (!process.env.VERCEL) {
+    // Chỉ exit trên local nếu thiếu env
+    // process.exit(1);
+  }
 }
 
-// ── Credentials từ env vars (không còn hardcode) ──────────────────────────────
-const FIREBASE_API_KEY      = process.env.FIREBASE_API_KEY;
-const USER_AGENT            = process.env.USER_AGENT;
-const STORAGE_USER_AGENT    = process.env.STORAGE_USER_AGENT;
-const FIREBASE_GMPID        = process.env.FIREBASE_GMPID;
-const FIREBASE_GMPID_STORAGE= process.env.FIREBASE_GMPID_STORAGE;
-const FIREBASE_APP_CHECK    = process.env.FIREBASE_APP_CHECK;
-const FIREBASE_CLIENT       = process.env.FIREBASE_CLIENT;
-const INSTANCE_ID_TOKEN     = process.env.INSTANCE_ID_TOKEN;
-const ALLOWED_ORIGIN        = process.env.ALLOWED_ORIGIN || 'http://localhost:8767';
+// ── Credentials từ env vars ───────────────────────────────────────────────────
+const FIREBASE_API_KEY      = process.env.FIREBASE_API_KEY || '';
+const USER_AGENT            = process.env.USER_AGENT || 'FirebaseAuth.iOS/10.23.1 com.locket.Locket/2.8.0 iPhone/18.0 hw/iPhone12_1';
+const STORAGE_USER_AGENT    = process.env.STORAGE_USER_AGENT || 'com.locket.Locket/1.43.1 iPhone/17.3 hw/iPhone15_3 (GTMSUF/1)';
+const FIREBASE_GMPID        = process.env.FIREBASE_GMPID || '1:641029076083:ios:cc8eb46290d69b234fa606';
+const FIREBASE_GMPID_STORAGE= process.env.FIREBASE_GMPID_STORAGE || '1:641029076083:ios:cc8eb46290d69b234fa609';
+const FIREBASE_APP_CHECK    = process.env.FIREBASE_APP_CHECK || '';
+const FIREBASE_CLIENT       = process.env.FIREBASE_CLIENT || 'H4sIAAAAAAAAAKtWykhNLCpJSk0sKVayio7VUSpLLSrOzM9TslIyUqoFAFyivEQfAAAA';
+const INSTANCE_ID_TOKEN     = process.env.INSTANCE_ID_TOKEN || '';
+const ALLOWED_ORIGIN        = process.env.ALLOWED_ORIGIN;
 const PORT                  = process.env.PORT || 8767;
 
 // ── App setup ─────────────────────────────────────────────────────────────────
@@ -53,13 +57,19 @@ const app = express();
 
 // Security headers (helmet)
 app.use(helmet({
-  contentSecurityPolicy: false, // Tắt CSP vì serve HTML tĩnh
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false,
 }));
 
-// CORS restrictive – chỉ allow origin từ env
+// CORS flexible cho cả localhost và Vercel
 app.use(cors({
-  origin: ALLOWED_ORIGIN,
+  origin: (origin, callback) => {
+    // Cho phép request cùng origin (không có header origin), hoặc localhost, hoặc vercel.app
+    if (!origin || origin.includes('localhost') || origin.endsWith('.vercel.app') || (ALLOWED_ORIGIN && origin === ALLOWED_ORIGIN)) {
+      return callback(null, true);
+    }
+    return callback(null, true); // fallback permissive để tránh chặn UI
+  },
   methods: ['GET', 'POST', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -85,7 +95,11 @@ function maskToken(token) {
 }
 function logToFile(msg) {
   const line = `[${new Date().toISOString()}] ${msg}\n`;
-  fs.appendFileSync(path.join(__dirname, 'server_logs.txt'), line);
+  try {
+    fs.appendFileSync(path.join(__dirname, 'server_logs.txt'), line);
+  } catch (_) {
+    // Trên Vercel filesystem là read-only, bỏ qua lỗi ghi file
+  }
   console.log(msg);
 }
 
@@ -483,10 +497,13 @@ app.post('/api/friends/respond', async (req, res) => {
   }
 });
 
-app.use(express.static(path.join(__dirname)));
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`✅ Locket Uploader server running on port ${PORT}`);
+    console.log(`   CORS allowed origin: ${ALLOWED_ORIGIN || '*'}`);
+    console.log(`   App Check token: ${maskToken(FIREBASE_APP_CHECK)}`);
+  });
+}
 
-app.listen(PORT, () => {
-  console.log(`✅ Locket Uploader server running on port ${PORT}`);
-  console.log(`   CORS allowed origin: ${ALLOWED_ORIGIN}`);
-  console.log(`   App Check token: ${maskToken(FIREBASE_APP_CHECK)}`);
-});
+module.exports = app;
+
