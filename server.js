@@ -113,6 +113,11 @@ function generateRandomName() {
   return name;
 }
 
+// ── Phục vụ giao diện trang chủ ───────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 // ── GET /api/config – trả API key cho frontend (không expose App Check/InstanceID) ──
 app.get('/api/config', (req, res) => {
   res.json({ apiKey: FIREBASE_API_KEY });
