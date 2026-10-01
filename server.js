@@ -113,9 +113,21 @@ function generateRandomName() {
   return name;
 }
 
-// ── Phục vụ giao diện trang chủ ───────────────────────────────────────────────
+// ── Phục vụ giao diện trang chủ & static assets ───────────────────────────────
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/style.css', (req, res) => {
+  res.sendFile(path.join(__dirname, 'style.css'));
+});
+
+app.get('/app.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'app.js'));
+});
+
+app.get('/crypto-storage.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'crypto-storage.js'));
 });
 
 // ── GET /api/config – trả API key cho frontend (không expose App Check/InstanceID) ──
